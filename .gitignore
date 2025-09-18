@@ -32,6 +32,11 @@ staticfiles/
 media/uploads/
 media/temp/
 
+# Large video files (use Git LFS or cloud storage for production)
+media/videos/*.mp4
+media/videos/*.avi
+media/videos/*.mov
+
 # Keep screenshots for documentation
 !screenshots/
 
