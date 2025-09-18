@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PlayBharat - India's Video Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    Welcome to PlayBharat
+                </h1>
+                <p class="lead mb-4">
+                    India's premier video platform celebrating our diverse culture, creativity, and stories. 
+                    Discover amazing content in multiple Indian languages.
+                </p>
+                <div class="d-flex gap-3">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Join PlayBharat
+                        </a>
+                    {% endif %}
+                    <a href="#" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-compass me-2"></i>Explore Content
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-video-placeholder bg-light rounded-3 d-flex align-items-center justify-content-center" style="height: 300px;">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-play-circle fs-1"></i>
+                        <p class="mt-2">Featured Video Placeholder</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Categories -->
+<section class="categories-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Explore by Category</h2>
+        <div class="row">
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-music-note-beamed fs-1 text-primary mb-2"></i>
+                    <h6 class="mb-0">Music</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-film fs-1 text-danger mb-2"></i>
+                    <h6 class="mb-0">Entertainment</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-newspaper fs-1 text-info mb-2"></i>
+                    <h6 class="mb-0">News</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-book fs-1 text-success mb-2"></i>
+                    <h6 class="mb-0">Education</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-trophy fs-1 text-warning mb-2"></i>
+                    <h6 class="mb-0">Sports</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-egg-fried fs-1 text-orange mb-2"></i>
+                    <h6 class="mb-0">Cooking</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action for Creators -->
+<section class="creator-cta py-5 bg-gradient-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="mb-3">Ready to Share Your Story?</h3>
+                <p class="lead mb-0">
+                    Join thousands of Indian creators who are already sharing their passion with the world. 
+                    Start your journey on PlayBharat today!
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'accounts:create_channel' %}" class="btn btn-light btn-lg">
+                    <i class="bi bi-plus-circle me-2"></i>Create Channel
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #FF9933 0%, #138808 100%);
+    }
+    
+    .category-card {
+        transition: transform 0.2s ease-in-out;
+        cursor: pointer;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .text-orange {
+        color: #fd7e14;
+    }
+</style>
+{% endblock %}

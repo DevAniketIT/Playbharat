@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Join PlayBharat - Create Account{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth-styles.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/auth-scripts.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-container">
+        <!-- Left Panel - Registration Form -->
+        <div class="auth-form-panel" style="flex: 0 0 50%;">
+            <div class="auth-form-container" style="max-width: 500px;">
+                <!-- Form Header -->
+                <div class="auth-form-header">
+                    <h1 class="auth-form-title">Join PlayBharat</h1>
+                    <p class="auth-form-subtitle">Create your account to start watching and sharing amazing videos with millions of Indians</p>
+                </div>
+                
+                <!-- Social Registration Buttons -->
+                <div class="auth-social-buttons" style="grid-template-columns: 1fr 1fr; margin-bottom: 1.5rem;">
+                    <a href="#" class="auth-social-button google">
+                        <i class="bi bi-google"></i>
+                        Google
+                    </a>
+                    <a href="#" class="auth-social-button facebook">
+                        <i class="bi bi-facebook"></i>
+                        Facebook
+                    </a>
+                </div>
+                
+                <!-- Divider -->
+                <div class="auth-divider">
+                    <span>or register with email</span>
+                </div>
+                
+                <!-- Registration Form -->
+                <form method="post" enctype="multipart/form-data" class="auth-form">
+                    {% csrf_token %}
+                    
+                    <!-- Username Field -->
+                    {% if form.username %}
+                    <div class="auth-form-group">
+                        <label class="auth-form-label" for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                        <div class="position-relative">
+                            <i class="bi bi-person auth-input-icon"></i>
+                            <input type="text" 
+                                   class="auth-form-input" 
+                                   id="{{ form.username.id_for_label }}" 
+                                   name="{{ form.username.name }}" 
+                                   placeholder="Choose a unique username"
+                                   value="{{ form.username.value|default_if_none:'' }}"
+                                   required>
+                        </div>
+                        {% if form.username.errors %}
+                            <div class="auth-error-message">{{ form.username.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Email Field -->
+                    {% if form.email %}
+                    <div class="auth-form-group">
+                        <label class="auth-form-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                        <div class="position-relative">
+                            <i class="bi bi-envelope auth-input-icon"></i>
+                            <input type="email" 
+                                   class="auth-form-input" 
+                                   id="{{ form.email.id_for_label }}" 
+                                   name="{{ form.email.name }}" 
+                                   placeholder="Enter your email address"
+                                   value="{{ form.email.value|default_if_none:'' }}"
+                                   required>
+                        </div>
+                        {% if form.email.errors %}
+                            <div class="auth-error-message">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Password Fields -->
+                    {% if form.password1 %}
+                    <div class="auth-form-group">
+                        <label class="auth-form-label" for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+                        <div class="position-relative">
+                            <i class="bi bi-lock auth-input-icon"></i>
+                            <input type="password" 
+                                   class="auth-form-input" 
+                                   id="{{ form.password1.id_for_label }}" 
+                                   name="{{ form.password1.name }}" 
+                                   placeholder="Create a strong password"
+                                   required>
+                        </div>
+                        {% if form.password1.errors %}
+                            <div class="auth-error-message">{{ form.password1.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if form.password2 %}
+                    <div class="auth-form-group">
+                        <label class="auth-form-label" for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+                        <div class="position-relative">
+                            <i class="bi bi-lock-fill auth-input-icon"></i>
+                            <input type="password" 
+                                   class="auth-form-input" 
+                                   id="{{ form.password2.id_for_label }}" 
+                                   name="{{ form.password2.name }}" 
+                                   placeholder="Confirm your password"
+                                   required>
+                        </div>
+                        {% if form.password2.errors %}
+                            <div class="auth-error-message">{{ form.password2.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Additional form fields -->
+                    {% for field in form %}
+                        {% if field.name not in "username,email,password1,password2" %}
+                        <div class="auth-form-group">
+                            <label class="auth-form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            <div class="position-relative">
+                                {% if field.field.widget.input_type == "select" %}
+                                    <i class="bi bi-chevron-down auth-input-icon"></i>
+                                {% elif field.name == "location" %}
+                                    <i class="bi bi-geo-alt auth-input-icon"></i>
+                                {% elif field.name == "phone" %}
+                                    <i class="bi bi-telephone auth-input-icon"></i>
+                                {% else %}
+                                    <i class="bi bi-info-circle auth-input-icon"></i>
+                                {% endif %}
+                                {{ field }}
+                            </div>
+                            {% if field.errors %}
+                                <div class="auth-error-message">{{ field.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <!-- Terms Agreement -->
+                    <div class="auth-form-group">
+                        <div class="auth-remember-me">
+                            <input type="checkbox" id="terms_agreement" name="terms_agreement" class="form-check-input" required>
+                            <label for="terms_agreement" class="form-check-label">
+                                I agree to PlayBharat's 
+                                <a href="{% url 'terms' %}" target="_blank" class="text-primary">Terms of Service</a> and 
+                                <a href="{% url 'privacy' %}" target="_blank" class="text-primary">Privacy Policy</a>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="auth-form-button">
+                        <i class="bi bi-person-plus me-2"></i>Create My Account
+                    </button>
+                    
+                    <!-- Non-field errors -->
+                    {% if form.non_field_errors %}
+                        <div class="auth-error-message mt-3 text-center">
+                            {{ form.non_field_errors.0 }}
+                        </div>
+                    {% endif %}
+                </form>
+                
+                <!-- Footer -->
+                <div class="auth-form-footer">
+                    <p>
+                        Already have an account? 
+                        <a href="{% url 'accounts:login' %}">Sign in here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Panel - Platform Showcase -->
+        <div class="auth-brand-panel" style="flex: 0 0 50%;">
+            <!-- Floating Icons -->
+            <div class="auth-floating-icons">
+                <i class="bi bi-camera-video floating-icon" style="font-size: 3.5rem;"></i>
+                <i class="bi bi-star-fill floating-icon" style="font-size: 2.5rem;"></i>
+                <i class="bi bi-trophy floating-icon" style="font-size: 3rem;"></i>
+            </div>
+            
+            <div class="auth-brand-content">
+                <!-- Logo -->
+                <div class="auth-brand-logo">
+                    <i class="bi bi-play-btn-fill text-warning me-2"></i>PlayBharat
+                </div>
+                
+                <!-- Tagline -->
+                <div class="auth-brand-tagline">
+                    Join India's Fastest Growing Video Community
+                </div>
+                
+                <!-- Platform Statistics -->
+                <div class="auth-registration-stats">
+                    <div class="auth-stat-item">
+                        <div class="auth-stat-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div class="auth-stat-text">
+                            <div class="auth-stat-number">10M+</div>
+                            <div class="auth-stat-label">Active Users</div>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-stat-item">
+                        <div class="auth-stat-icon">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="auth-stat-text">
+                            <div class="auth-stat-number">25K+</div>
+                            <div class="auth-stat-label">Videos Uploaded Daily</div>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-stat-item">
+                        <div class="auth-stat-icon">
+                            <i class="bi bi-currency-rupee"></i>
+                        </div>
+                        <div class="auth-stat-text">
+                            <div class="auth-stat-number">₹50L+</div>
+                            <div class="auth-stat-label">Paid to Creators</div>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-stat-item">
+                        <div class="auth-stat-icon">
+                            <i class="bi bi-translate"></i>
+                        </div>
+                        <div class="auth-stat-text">
+                            <div class="auth-stat-number">15+</div>
+                            <div class="auth-stat-label">Indian Languages</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Benefits List -->
+                <ul class="auth-brand-features">
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        Upload unlimited videos for free
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        Monetize your content and earn money
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        Reach audiences across India
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        Get detailed analytics and insights
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ channel.name }} - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Channel Banner -->
+    <div class="row">
+        <div class="col-12 p-0">
+            {% if channel.banner %}
+                <div class="channel-banner position-relative" 
+                     style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('{{ channel.banner.url }}'); 
+                            background-size: cover; background-position: center; height: 300px;">
+            {% else %}
+                <div class="channel-banner position-relative bg-gradient-primary d-flex align-items-center justify-content-center" 
+                     style="height: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            {% endif %}
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bold">{{ channel.name }}</h1>
+                    <p class="lead">{{ channel.handle }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Channel Info -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center">
+                                {% if channel.profile_picture %}
+                                    <img src="{{ channel.profile_picture.url }}" alt="{{ channel.name }}" 
+                                         class="rounded-circle border border-3 border-light" 
+                                         width="100" height="100" style="margin-top: -50px;">
+                                {% else %}
+                                    <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center" 
+                                         style="width: 100px; height: 100px; margin-top: -50px;">
+                                        <i class="bi bi-tv display-4 text-white"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                                <h3>{{ channel.name }}</h3>
+                                <p class="text-muted mb-1">{{ channel.handle }}</p>
+                                <p class="mb-2">
+                                    <span class="badge bg-primary">{{ channel.subscriber_count }} subscribers</span>
+                                    <span class="badge bg-info">{{ channel.videos.count }} videos</span>
+                                </p>
+                                {% if channel.description %}
+                                    <p class="text-muted">{{ channel.description|truncatechars:100 }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-2 text-center">
+                                {% if user.is_authenticated and user != channel.user %}
+                                    <button class="btn {% if is_subscribed %}btn-secondary{% else %}btn-danger{% endif %} btn-lg" 
+                                            onclick="toggleSubscription('{{ channel.handle|slice:'1:' }}')"
+                                            id="subscribe-btn">
+                                        {% if is_subscribed %}
+                                            <i class="bi bi-check-circle me-2"></i>Subscribed
+                                        {% else %}
+                                            <i class="bi bi-plus-circle me-2"></i>Subscribe
+                                        {% endif %}
+                                    </button>
+                                {% elif user == channel.user %}
+                                    <a href="{% url 'accounts:channel_dashboard' %}" class="btn btn-outline-primary">
+                                        <i class="bi bi-gear me-2"></i>Manage Channel
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Channel Navigation -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav class="nav nav-pills justify-content-center bg-light rounded p-2">
+                    <a class="nav-link active" href="{% url 'channels:detail' handle=channel.handle|slice:'1:' %}">
+                        <i class="bi bi-house me-2"></i>Home
+                    </a>
+                    <a class="nav-link" href="{% url 'channels:videos' handle=channel.handle|slice:'1:' %}">
+                        <i class="bi bi-play me-2"></i>Videos
+                    </a>
+                    <a class="nav-link" href="{% url 'channels:playlists' handle=channel.handle|slice:'1:' %}">
+                        <i class="bi bi-collection-play me-2"></i>Playlists
+                    </a>
+                    <a class="nav-link" href="{% url 'channels:community_posts' handle=channel.handle|slice:'1:' %}">
+                        <i class="bi bi-chat-dots me-2"></i>Community
+                    </a>
+                    <a class="nav-link" href="{% url 'channels:about' handle=channel.handle|slice:'1:' %}">
+                        <i class="bi bi-info-circle me-2"></i>About
+                    </a>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Recent Videos -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Recent Videos</h4>
+                    <a href="{% url 'channels:videos' handle=channel.handle|slice:'1:' %}" class="btn btn-outline-primary">
+                        View All <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                
+                {% if recent_videos %}
+                    <div class="row">
+                        {% for video in recent_videos %}
+                            <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                                <div class="card h-100">
+                                    <div class="position-relative">
+                                        {% if video.thumbnail %}
+                                            <img src="{{ video.thumbnail.url }}" class="card-img-top" alt="{{ video.title }}">
+                                        {% else %}
+                                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                                <i class="bi bi-play-circle display-4 text-muted"></i>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        {% if video.duration %}
+                                            <span class="badge bg-dark position-absolute bottom-0 end-0 m-2">
+                                                {{ video.duration }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <a href="#" class="text-decoration-none text-dark">
+                                                {{ video.title|truncatechars:60 }}
+                                            </a>
+                                        </h6>
+                                        
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">{{ video.view_count }} views</small>
+                                            <small class="text-muted">{{ video.uploaded_at|timesince }} ago</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-camera-video display-1 text-muted"></i>
+                        <h5 class="mt-3">No videos yet</h5>
+                        <p class="text-muted">This channel hasn't uploaded any videos yet.</p>
+                        {% if user == channel.user %}
+                            <a href="{% url 'videos:upload' %}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>Upload Your First Video
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleSubscription(handle) {
+    // Simple subscription toggle - you can enhance this with actual API calls
+    const btn = document.getElementById('subscribe-btn');
+    if (btn.classList.contains('btn-secondary')) {
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('btn-danger');
+        btn.innerHTML = '<i class="bi bi-plus-circle me-2"></i>Subscribe';
+    } else {
+        btn.classList.remove('btn-danger');
+        btn.classList.add('btn-secondary');
+        btn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Subscribed';
+    }
+}
+</script>
+{% endblock %}

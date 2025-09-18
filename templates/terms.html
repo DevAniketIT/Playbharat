@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Terms of Service - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="bg-white rounded shadow p-5">
+                <h1 class="display-4 text-primary mb-4">Terms of Service</h1>
+                <p class="text-muted mb-4">Last updated: January 2024</p>
+                
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Please read these Terms of Service carefully before using PlayBharat. By accessing our platform, you agree to be bound by these terms.
+                </div>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">1. Acceptance of Terms</h2>
+                    
+                    <p>By accessing and using PlayBharat ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.</p>
+                    
+                    <p>These terms apply to all users of the Service, including without limitation users who are browsers, vendors, customers, merchants, and/or contributors of content.</p>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">2. Description of Service</h2>
+                    
+                    <p>PlayBharat is a video sharing platform that allows users to:</p>
+                    <ul>
+                        <li>Upload, share, and stream video content</li>
+                        <li>Create channels and build communities</li>
+                        <li>Interact with content through comments, likes, and shares</li>
+                        <li>Discover content through search and recommendations</li>
+                        <li>Access content across multiple devices and platforms</li>
+                    </ul>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">3. User Accounts</h2>
+                    
+                    <h4 class="text-dark mb-3">3.1 Account Registration</h4>
+                    <p>To access certain features, you must register for an account. You agree to:</p>
+                    <ul>
+                        <li>Provide accurate and complete information</li>
+                        <li>Keep your account information updated</li>
+                        <li>Maintain the security of your password</li>
+                        <li>Accept responsibility for all activities under your account</li>
+                    </ul>
+                    
+                    <h4 class="text-dark mb-3">3.2 Account Restrictions</h4>
+                    <p>You must be at least 13 years old to create an account. Users under 18 should obtain parental consent before using the service.</p>
+                    
+                    <h4 class="text-dark mb-3">3.3 Account Termination</h4>
+                    <p>We reserve the right to suspend or terminate accounts that violate these terms or engage in harmful activities.</p>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">4. Content Guidelines</h2>
+                    
+                    <h4 class="text-dark mb-3">4.1 Permitted Content</h4>
+                    <p>You may upload content that is:</p>
+                    <ul>
+                        <li>Original or properly licensed</li>
+                        <li>Legal and compliant with applicable laws</li>
+                        <li>Respectful of others' rights and dignity</li>
+                        <li>Appropriate for the intended audience</li>
+                    </ul>
+                    
+                    <h4 class="text-dark mb-3">4.2 Prohibited Content</h4>
+                    <div class="alert alert-danger">
+                        <strong>The following content is strictly prohibited:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>Hate speech, harassment, or bullying</li>
+                            <li>Violence, graphic content, or harmful activities</li>
+                            <li>Adult content or sexual material</li>
+                            <li>Copyright infringing material</li>
+                            <li>Spam, misleading, or deceptive content</li>
+                            <li>Content that violates privacy or contains personal information</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 class="text-dark mb-3">4.3 Content Moderation</h4>
+                    <p>We reserve the right to review, remove, or restrict access to any content that violates these guidelines.</p>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">5. Intellectual Property</h2>
+                    
+                    <h4 class="text-dark mb-3">5.1 Your Content</h4>
+                    <p>You retain ownership of content you upload. By uploading content, you grant us a worldwide, non-exclusive license to use, reproduce, and distribute your content on our platform.</p>
+                    
+                    <h4 class="text-dark mb-3">5.2 Our Content</h4>
+                    <p>PlayBharat's platform, design, and features are protected by intellectual property laws. You may not copy, modify, or reverse engineer our service.</p>
+                    
+                    <h4 class="text-dark mb-3">5.3 Third-Party Content</h4>
+                    <p>Respect others' intellectual property rights. Do not upload content that infringes on copyrights, trademarks, or other rights.</p>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">6. User Conduct</h2>
+                    
+                    <p>You agree not to:</p>
+                    <ul>
+                        <li>Violate any applicable laws or regulations</li>
+                        <li>Harass, abuse, or harm other users</li>
+                        <li>Impersonate others or create fake accounts</li>
+                        <li>Attempt to gain unauthorized access to the platform</li>
+                        <li>Interfere with the platform's operation or security</li>
+                        <li>Use automated systems to access the service</li>
+                        <li>Collect user information without consent</li>
+                    </ul>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">7. Privacy</h2>
+                    
+                    <p>Your privacy is important to us. Please review our <a href="{% url 'privacy' %}" class="text-primary">Privacy Policy</a> to understand how we collect, use, and protect your information.</p>
+                    
+                    <p>By using our service, you consent to the collection and use of your information as described in our Privacy Policy.</p>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">8. Disclaimers and Limitation of Liability</h2>
+                    
+                    <h4 class="text-dark mb-3">8.1 Service Availability</h4>
+                    <p>We strive to provide reliable service but cannot guarantee uninterrupted access. The service is provided "as is" without warranties of any kind.</p>
+                    
+                    <h4 class="text-dark mb-3">8.2 Content Disclaimer</h4>
+                    <p>We are not responsible for user-generated content. Users are solely responsible for their content and interactions on the platform.</p>
+                    
+                    <h4 class="text-dark mb-3">8.3 Limitation of Liability</h4>
+                    <div class="alert alert-warning">
+                        <strong>Important:</strong> To the maximum extent permitted by law, PlayBharat shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the service.
+                    </div>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">9. Monetization</h2>
+                    
+                    <h4 class="text-dark mb-3">9.1 Creator Program</h4>
+                    <p>Eligible creators may participate in our monetization programs. Participation is subject to additional terms and conditions.</p>
+                    
+                    <h4 class="text-dark mb-3">9.2 Revenue Sharing</h4>
+                    <p>Revenue sharing terms will be specified in separate agreements with participating creators.</p>
+                    
+                    <h4 class="text-dark mb-3">9.3 Advertising</h4>
+                    <p>We may display advertisements on the platform. We reserve the right to control advertising placement and content.</p>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">10. Termination</h2>
+                    
+                    <p>Either party may terminate this agreement at any time:</p>
+                    <ul>
+                        <li><strong>By You:</strong> Delete your account through account settings</li>
+                        <li><strong>By Us:</strong> For violation of terms, illegal activity, or at our discretion</li>
+                    </ul>
+                    
+                    <p>Upon termination, your access to the service will cease, and we may delete your account and content.</p>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">11. Changes to Terms</h2>
+                    
+                    <p>We may update these terms from time to time. We will notify users of material changes through:</p>
+                    <ul>
+                        <li>Email notifications to registered users</li>
+                        <li>Prominent notices on the platform</li>
+                        <li>Updates to this page</li>
+                    </ul>
+                    
+                    <p>Continued use of the service after changes constitutes acceptance of the updated terms.</p>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">12. Governing Law</h2>
+                    
+                    <p>These terms shall be governed by and construed in accordance with the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts in Bangalore, Karnataka.</p>
+                </section>
+                
+                <section class="mb-5">
+                    <h2 class="text-secondary mb-3">13. Contact Information</h2>
+                    
+                    <p>For questions about these Terms of Service, please contact us:</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Email:</strong> legal@playbharat.com<br>
+                            <strong>Phone:</strong> +91 80 1234 5678<br>
+                            <strong>Address:</strong> PlayBharat Legal Department<br>
+                            Tech Park, Sector 5<br>
+                            Bangalore, Karnataka 560001, India
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'contact' %}" class="btn btn-outline-primary">
+                                <i class="bi bi-envelope me-2"></i>Contact Form
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                
+                <div class="text-center mt-5">
+                    <p class="text-muted">
+                        By using PlayBharat, you acknowledge that you have read, understood, and agree to these Terms of Service.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

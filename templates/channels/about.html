@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ channel.name }} - About - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Channel Banner -->
+    <div class="row">
+        <div class="col-12 p-0">
+            {% if channel.banner %}
+                <div class="channel-banner position-relative" 
+                     style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('{{ channel.banner.url }}'); 
+                            background-size: cover; background-position: center; height: 200px;">
+            {% else %}
+                <div class="channel-banner position-relative bg-gradient-primary d-flex align-items-center justify-content-center" 
+                     style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            {% endif %}
+                <div class="text-center text-white">
+                    <h2 class="fw-bold">{{ channel.name }} - About</h2>
+                    <p>{{ channel.handle }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Channel Navigation -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <nav class="nav nav-pills justify-content-center bg-light rounded p-2">
+                    <a class="nav-link" href="{% url 'channels:detail' handle=channel.handle|slice:'1:' %}">
+                        <i class="bi bi-house me-2"></i>Home
+                    </a>
+                    <a class="nav-link" href="{% url 'channels:videos' handle=channel.handle|slice:'1:' %}">
+                        <i class="bi bi-play me-2"></i>Videos
+                    </a>
+                    <a class="nav-link" href="{% url 'channels:playlists' handle=channel.handle|slice:'1:' %}">
+                        <i class="bi bi-collection-play me-2"></i>Playlists
+                    </a>
+                    <a class="nav-link" href="{% url 'channels:community_posts' handle=channel.handle|slice:'1:' %}">
+                        <i class="bi bi-chat-dots me-2"></i>Community
+                    </a>
+                    <a class="nav-link active" href="{% url 'channels:about' handle=channel.handle|slice:'1:' %}">
+                        <i class="bi bi-info-circle me-2"></i>About
+                    </a>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- About Section -->
+        <div class="row mt-4">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">About {{ channel.name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if channel.description %}
+                            <h6>Description</h6>
+                            <p>{{ channel.description|linebreaks }}</p>
+                        {% else %}
+                            <p class="text-muted">No description available.</p>
+                        {% endif %}
+                        
+                        <hr>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Channel Details</h6>
+                                <ul class="list-unstyled">
+                                    <li><strong>Category:</strong> {{ channel.get_category_display }}</li>
+                                    <li><strong>Created:</strong> {{ channel.created_at|date:"F d, Y" }}</li>
+                                    <li><strong>Total Videos:</strong> {{ channel.total_videos }}</li>
+                                    <li><strong>Total Views:</strong> {{ channel.total_views|floatformat:0 }}</li>
+                                    <li><strong>Subscribers:</strong> {{ channel.subscriber_count|floatformat:0 }}</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Owner Information</h6>
+                                <div class="d-flex align-items-center mb-3">
+                                    {% if channel.user.profile_picture %}
+                                        <img src="{{ channel.user.profile_picture.url }}" class="rounded-circle me-3" width="50" height="50">
+                                    {% else %}
+                                        <div class="bg-secondary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                            <i class="bi bi-person text-white"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <div class="fw-semibold">{{ channel.user.get_full_name|default:channel.user.username }}</div>
+                                        <small class="text-muted">@{{ channel.user.username }}</small>
+                                    </div>
+                                </div>
+                                
+                                <ul class="list-unstyled">
+                                    <li><strong>Country:</strong> {{ channel.user.country }}</li>
+                                    {% if channel.user.state %}
+                                        <li><strong>State:</strong> {{ channel.user.state }}</li>
+                                    {% endif %}
+                                    <li><strong>Language:</strong> {{ channel.user.get_preferred_language_display }}</li>
+                                    {% if channel.user.is_verified_creator %}
+                                        <li><span class="badge bg-info">Verified Creator</span></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        {% if channel.website_url or channel.twitter_url or channel.instagram_url or channel.facebook_url %}
+                            <hr>
+                            <h6>Social Links</h6>
+                            <div class="d-flex gap-2 flex-wrap">
+                                {% if channel.website_url %}
+                                    <a href="{{ channel.website_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-globe me-1"></i>Website
+                                    </a>
+                                {% endif %}
+                                {% if channel.twitter_url %}
+                                    <a href="{{ channel.twitter_url }}" target="_blank" class="btn btn-outline-info btn-sm">
+                                        <i class="bi bi-twitter me-1"></i>Twitter
+                                    </a>
+                                {% endif %}
+                                {% if channel.instagram_url %}
+                                    <a href="{{ channel.instagram_url }}" target="_blank" class="btn btn-outline-warning btn-sm">
+                                        <i class="bi bi-instagram me-1"></i>Instagram
+                                    </a>
+                                {% endif %}
+                                {% if channel.facebook_url %}
+                                    <a href="{{ channel.facebook_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-facebook me-1"></i>Facebook
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Channel Stats</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="mb-2">
+                                    <div class="h4 text-primary mb-0">{{ channel.subscriber_count|floatformat:0 }}</div>
+                                    <small class="text-muted">Subscribers</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-2">
+                                    <div class="h4 text-info mb-0">{{ channel.total_videos }}</div>
+                                    <small class="text-muted">Videos</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-2">
+                                    <div class="h4 text-success mb-0">{{ channel.total_views|floatformat:0 }}</div>
+                                    <small class="text-muted">Total Views</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Channel Status</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column gap-2">
+                            {% if channel.is_active %}
+                                <span class="badge bg-success">Active Channel</span>
+                            {% else %}
+                                <span class="badge bg-danger">Inactive Channel</span>
+                            {% endif %}
+                            
+                            {% if channel.is_monetized %}
+                                <span class="badge bg-warning">Monetization Enabled</span>
+                            {% endif %}
+                            
+                            {% if channel.allow_comments %}
+                                <span class="badge bg-info">Comments Enabled</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Comments Disabled</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

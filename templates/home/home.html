@@ -1,0 +1,825 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PlayBharat - India's Premier Video Platform{% endblock %}
+
+{% block content %}
+<!-- Professional Hero Section -->
+<section class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold mb-3">
+                        Welcome to <span class="text-accent">PlayBharat</span>
+                    </h1>
+                    <p class="lead mb-4" style="font-size: 1.2rem; line-height: 1.6; color: rgba(255, 255, 255, 0.95); font-weight: 500; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+                        India's premier video platform connecting millions of creators and viewers across the nation
+                    </p>
+                    <div class="hero-stats mb-4">
+                        <div class="row text-center g-3">
+                            <div class="col-4">
+                                <div class="stat-box">
+                                    <h5 class="fw-bold mb-1">25K+</h5>
+                                    <small class="opacity-85">Videos</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-box">
+                                    <h5 class="fw-bold mb-1">15+</h5>
+                                    <small class="opacity-85">Languages</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-box">
+                                    <h5 class="fw-bold mb-1">10K+</h5>
+                                    <small class="opacity-85">Creators</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% if not user.is_authenticated %}
+                            <a href="{% url 'accounts:register' %}" class="btn btn-light">
+                                <i class="bi bi-person-plus me-2"></i>Join PlayBharat
+                            </a>
+                        {% endif %}
+                        <a href="#videos" class="btn btn-outline-light">
+                            <i class="bi bi-compass me-2"></i>Explore Content
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                {% if trending_videos %}
+                    <div class="hero-video-showcase">
+                        <div class="showcase-header mb-3">
+                            <h6 class="text-white mb-0">
+                                <i class="bi bi-trending-up me-2"></i>Trending Now
+                            </h6>
+                        </div>
+                        
+                        {% for video in trending_videos|slice:":3" %}
+                            <a href="{{ video.get_absolute_url }}" class="text-decoration-none">
+                                <div class="featured-video-card mb-2">
+                                    <div class="card border-0 bg-dark bg-opacity-75 text-white">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-4">
+                                                <div class="video-thumbnail bg-primary rounded d-flex align-items-center justify-content-center" style="height: 60px;">
+                                                    {% if video.thumbnail %}
+                                                        <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="img-fluid rounded w-100 h-100" style="object-fit: cover;">
+                                                    {% else %}
+                                                        <i class="bi bi-play-fill text-white"></i>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-8 ps-2">
+                                                <h6 class="card-title mb-1 small text-white">{{ video.title|truncatechars:40 }}</h6>
+                                                <small class="text-white-50">
+                                                    <i class="bi bi-eye me-1"></i>{{ video.view_count|floatformat:0 }} views
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Platform Features -->
+<section class="features-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h3 class="fw-bold mb-2">
+                Platform Features
+            </h3>
+            <p class="text-muted">Designed for India's diverse content creators</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <div class="feature-card text-center p-4 bg-white rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-graph-up" style="font-size: 2.5rem; color: var(--accent-orange);"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Trending Content</h6>
+                    <small class="text-muted">Discover popular videos</small>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="feature-card text-center p-4 bg-white rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-calendar-event" style="font-size: 2.5rem; color: var(--accent-green);"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Special Events</h6>
+                    <small class="text-muted">Cultural celebrations</small>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="feature-card text-center p-4 bg-white rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-geo-alt" style="font-size: 2.5rem; color: var(--accent-purple);"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Regional Content</h6>
+                    <small class="text-muted">Local creator network</small>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="feature-card text-center p-4 bg-white rounded shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-credit-card" style="font-size: 2.5rem; color: var(--primary-blue);"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Secure Payments</h6>
+                    <small class="text-muted">Multiple payment options</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Content Categories -->
+<section class="categories-section py-4">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h3 class="fw-bold mb-2">
+                Browse Categories
+            </h3>
+            <p class="text-muted">Explore content across different genres</p>
+        </div>
+        <div class="row g-3">
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm">
+                    <i class="bi bi-music-note-beamed fs-3 text-primary mb-2"></i>
+                    <h6 class="fw-semibold mb-0">Music</h6>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm">
+                    <i class="bi bi-film fs-3 text-success mb-2"></i>
+                    <h6 class="fw-semibold mb-0">Movies</h6>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm">
+                    <i class="bi bi-trophy fs-3 text-warning mb-2"></i>
+                    <h6 class="fw-semibold mb-0">Sports</h6>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm">
+                    <i class="bi bi-book fs-3 text-info mb-2"></i>
+                    <h6 class="fw-semibold mb-0">Education</h6>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm">
+                    <i class="bi bi-newspaper fs-3 text-danger mb-2"></i>
+                    <h6 class="fw-semibold mb-0">News</h6>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-3 bg-white rounded shadow-sm">
+                    <i class="bi bi-heart fs-3 mb-2" style="color: #ec4899;"></i>
+                    <h6 class="fw-semibold mb-0">Lifestyle</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Videos Section -->
+<section id="videos" class="videos-section py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center mb-4">
+            <div class="col">
+                <h3 class="fw-bold mb-2">
+                    Latest Videos
+                </h3>
+                <p class="text-muted mb-0">Discover the newest content from our creators</p>
+            </div>
+            <div class="col-auto">
+                <a href="{% url 'videos:list' %}" class="btn btn-primary">
+                    View All <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+
+        {% if videos %}
+            <div class="row g-4">
+                {% for video in videos %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="video-card border-0 rounded overflow-hidden shadow-sm" style="cursor: pointer;" onclick="window.location.href='{{ video.get_absolute_url }}'">
+                            <div class="card border-0">
+                                <div class="video-thumbnail bg-secondary d-flex align-items-center justify-content-center position-relative" style="height: 200px;">
+                                    {% if video.thumbnail %}
+                                        <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                    {% else %}
+                                        <div class="text-center text-white p-2">
+                                            <i class="bi bi-play-circle mb-2" style="font-size: 2.5rem; opacity: 0.8;"></i>
+                                            <div class="video-title-overlay">
+                                                <strong style="font-size: 0.9rem; line-height: 1.2; display: block;">{{ video.title|truncatechars:45 }}</strong>
+                                                <small class="mt-1 d-block" style="opacity: 0.8;">{{ video.get_category_display }}</small>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    <!-- Play overlay on hover -->
+                                    <div class="play-overlay-hover position-absolute top-50 start-50 translate-middle" style="opacity: 0; transition: opacity 0.3s ease; pointer-events: none;">
+                                        <i class="bi bi-play-fill text-white" style="font-size: 2rem; background: rgba(0,0,0,0.7); border-radius: 50%; padding: 0.5rem;"></i>
+                                    </div>
+                                </div>
+                                <div class="video-info p-3 bg-white">
+                                    <h6 class="video-title mb-1 lh-sm">
+                                        <span class="text-dark fw-medium">{{ video.title|truncatechars:50 }}</span>
+                                    </h6>
+                                    <div class="channel-info mb-1">
+                                        <small class="text-muted fw-medium">
+                                            <i class="bi bi-person-circle me-1"></i>{{ video.channel.name }}
+                                        </small>
+                                    </div>
+                                    <div class="video-stats mb-1">
+                                        <small class="text-muted">
+                                            <i class="bi bi-eye me-1"></i>{{ video.view_count|floatformat:0 }} views
+                                            <span class="mx-1">•</span>
+                                            {{ video.uploaded_at|timesince }} ago
+                                        </small>
+                                    </div>
+                                    <div class="video-category">
+                                        <span class="badge bg-primary badge-sm">{{ video.get_category_display }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-videos text-center py-3">
+                <div class="mb-2">
+                    <i class="bi bi-camera-video display-6 text-primary"></i>
+                </div>
+                <h5 class="text-primary mb-1">Content Coming Soon!</h5>
+                <p class="text-muted mb-2">Creators are preparing amazing videos for you.</p>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-person-plus me-1"></i>Join PlayBharat
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Creator Call-to-Action -->
+<section class="creator-cta py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="mb-3" style="color: rgba(255, 255, 255, 0.98); font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.4);">Start Your Content Journey</h3>
+                <p class="lead mb-0" style="color: rgba(255, 255, 255, 0.92); font-weight: 500; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); font-size: 1.1rem; line-height: 1.5;">Join thousands of Indian creators building engaged communities and sharing their expertise with audiences nationwide</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                {% if user.is_authenticated %}
+                    {% if user.has_channel %}
+                        <a href="#" class="btn btn-light btn-lg">
+                            <i class="bi bi-upload me-2"></i>Upload Video
+                        </a>
+                    {% else %}
+                        <a href="{% url 'accounts:create_channel' %}" class="btn btn-light btn-lg">
+                            <i class="bi bi-plus-circle me-2"></i>Create Channel
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg">
+                        <i class="bi bi-person-plus me-2"></i>Get Started
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-blue: #1e40af;
+        --secondary-blue: #3b82f6;
+        --accent-orange: #f97316;
+        --accent-green: #16a34a;
+        --accent-purple: #7c3aed;
+        --text-dark: #1f2937;
+        --text-muted: #6b7280;
+        --bg-light: #f9fafb;
+        --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        line-height: 1.6;
+        color: var(--text-dark);
+    }
+
+    /* Attractive Professional Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        min-height: 500px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 50%, rgba(249, 115, 22, 0.2) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.2) 0%, transparent 50%),
+            radial-gradient(circle at 40% 80%, rgba(124, 58, 237, 0.2) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .text-accent {
+        background: linear-gradient(45deg, #fbbf24, #f59e0b, #f97316);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 800;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .hero-stats {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .hero-stats:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-box h5 {
+        font-size: 1.4rem;
+        color: white;
+        font-weight: 700;
+    }
+    
+    .stat-box small {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
+    }
+
+    /* Attractive Features Section */
+    .features-section {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+        position: relative;
+    }
+    
+    .features-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23e0f2fe" fill-opacity="0.4"><circle cx="7" cy="7" r="1"/><circle cx="53" cy="53" r="1"/><circle cx="27" cy="43" r="1"/></g></svg>') repeat;
+        pointer-events: none;
+        opacity: 0.5;
+    }
+    
+    .feature-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border-color: transparent;
+        background: rgba(255, 255, 255, 1);
+    }
+    
+    .feature-icon i {
+        transition: transform 0.3s ease;
+    }
+    
+    .feature-card:hover .feature-icon i {
+        transform: scale(1.2) rotate(5deg);
+    }
+    
+    /* Feature icons already have individual colors set inline */
+
+    /* Attractive Categories Section */
+    .categories-section {
+        background: linear-gradient(135deg, #fefefe 0%, #f8fafc 50%, #fefefe 100%);
+        position: relative;
+    }
+    
+    .categories-section::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, #e5e7eb 50%, transparent 100%);
+    }
+    
+    .category-card {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e5e7eb;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .category-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+        transition: left 0.6s;
+    }
+
+    .category-card:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        border-color: transparent;
+        background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+    }
+    
+    .category-card:hover::before {
+        left: 100%;
+    }
+    
+    .category-card i {
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .category-card:hover i {
+        transform: scale(1.2) rotate(5deg);
+    }
+
+    /* Attractive Video Cards Section */
+    .videos-section {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 30%, #f0f9ff 70%, #fefefe 100%);
+        position: relative;
+    }
+    
+    .videos-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23dbeafe" fill-opacity="0.3"><polygon points="20,0 40,20 20,40 0,20"/></g></svg>') repeat;
+        pointer-events: none;
+        opacity: 0.4;
+    }
+    
+    .video-card {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        height: 100%;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        position: relative;
+    }
+    
+    .video-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, transparent 0%, rgba(103, 126, 234, 0.03) 50%, transparent 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .video-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        border-color: rgba(103, 126, 234, 0.3);
+        background: rgba(255, 255, 255, 1);
+    }
+    
+    .video-card:hover::before {
+        opacity: 1;
+    }
+
+    .video-card:hover .play-overlay-hover {
+        opacity: 1 !important;
+    }
+    
+    .video-card .card {
+        border: none !important;
+        border-radius: 10px;
+    }
+
+    .video-thumbnail {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        border-radius: 15px 15px 0 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .video-thumbnail::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.05) 100%);
+        pointer-events: none;
+    }
+
+    .video-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 1.25rem !important;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(5px);
+        position: relative;
+        z-index: 2;
+    }
+    
+    .video-info .video-title {
+        font-weight: 600;
+        color: var(--text-dark);
+        line-height: 1.4;
+        margin-bottom: 0.75rem;
+    }
+    
+    .channel-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+    
+    .channel-info small {
+        font-weight: 500;
+        color: var(--text-muted);
+    }
+    
+    .video-stats small {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+    }
+
+    .video-title {
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    .badge-sm {
+        font-size: 0.75rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 500;
+        text-transform: capitalize;
+    }
+    
+    .bg-primary {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%) !important;
+        border: none;
+    }
+
+    /* Professional Hero Showcase */
+    .hero-video-showcase {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .featured-video-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(5px);
+    }
+
+    .featured-video-card:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Attractive CTA Section */
+    .creator-cta {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .creator-cta::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 30% 40%, rgba(249, 115, 22, 0.2) 0%, transparent 50%),
+            radial-gradient(circle at 70% 60%, rgba(124, 58, 237, 0.2) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    /* Professional Buttons */
+    .btn {
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .btn-light {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: var(--primary-blue);
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-light::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(103, 126, 234, 0.1), transparent);
+        transition: left 0.5s;
+    }
+    
+    .btn-light:hover {
+        background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+        border-color: rgba(103, 126, 234, 0.3);
+        color: var(--primary-blue);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(103, 126, 234, 0.2);
+    }
+    
+    .btn-light:hover::before {
+        left: 100%;
+    }
+
+    .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        color: white;
+        background: transparent;
+    }
+    
+    .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+        border: none;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--accent-purple) 0%, var(--primary-blue) 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+    }
+    
+    .btn-primary:hover::before {
+        left: 100%;
+    }
+    
+    .btn-outline-primary {
+        border: 2px solid var(--primary-blue);
+        color: var(--primary-blue);
+        background: transparent;
+    }
+    
+    .btn-outline-primary:hover {
+        background: var(--primary-blue);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .hero-section {
+            min-height: 400px;
+            padding: 2rem 0;
+        }
+        
+        .display-4 {
+            font-size: 2rem;
+        }
+        
+        .features-section, .categories-section, .videos-section {
+            padding: 3rem 0;
+        }
+        
+        .category-card {
+            height: 90px;
+        }
+        
+        .video-thumbnail {
+            height: 180px !important;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-section {
+            min-height: 350px;
+        }
+        
+        .display-4 {
+            font-size: 1.75rem;
+        }
+        
+        .hero-stats {
+            padding: 1.25rem;
+        }
+        
+        .stat-box h5 {
+            font-size: 1.2rem;
+        }
+        
+        .category-card {
+            height: 80px;
+        }
+        
+        .category-card i {
+            font-size: 1.5rem !important;
+        }
+        
+        .video-thumbnail {
+            height: 160px !important;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,249 @@
+{% extends 'custom_admin/admin_base.html' %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Welcome back! Here's your platform overview.{% endblock %}
+
+{% block content %}
+<!-- Statistics Cards -->
+<div class="row g-2 mb-3">
+    <div class="col-lg-3 col-md-6">
+        <div class="admin-card">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h5 class="text-primary mb-0">{{ total_users|floatformat:0 }}</h5>
+                        <p class="text-muted small mb-0">Total Users</p>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> +{{ users_this_week }}</small>
+                    </div>
+                    <div class="text-primary" style="font-size: 1.2rem; opacity: 0.5;">
+                        <i class="bi bi-people"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="admin-card">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h5 class="text-success mb-0">{{ total_videos|floatformat:0 }}</h5>
+                        <p class="text-muted small mb-0">Total Videos</p>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> +{{ videos_this_week }}</small>
+                    </div>
+                    <div class="text-success" style="font-size: 1.2rem; opacity: 0.5;">
+                        <i class="bi bi-play-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="admin-card">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h5 class="text-info mb-0">{{ total_channels|floatformat:0 }}</h5>
+                        <p class="text-muted small mb-0">Total Channels</p>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> +{{ channels_this_week }}</small>
+                    </div>
+                    <div class="text-info" style="font-size: 1.2rem; opacity: 0.5;">
+                        <i class="bi bi-tv"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="admin-card">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h5 class="text-warning mb-0">{{ total_playlists|floatformat:0 }}</h5>
+                        <p class="text-muted small mb-0">Total Playlists</p>
+                        <small class="text-muted"><i class="bi bi-dash"></i> User created</small>
+                    </div>
+                    <div class="text-warning" style="font-size: 1.2rem; opacity: 0.5;">
+                        <i class="bi bi-collection-play"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="row g-2 mb-3">
+    <div class="col-lg-8">
+        <div class="admin-card">
+            <div class="card-header p-2">
+                <h6 class="card-title mb-0">Monthly Growth</h6>
+            </div>
+            <div class="card-body p-2">
+                <canvas id="monthlyGrowthChart" style="max-height: 180px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="admin-card h-100">
+            <div class="card-header p-2">
+                <h6 class="card-title mb-0">Quick Actions</h6>
+            </div>
+            <div class="card-body p-2">
+                <div class="d-grid gap-1">
+                    <a href="{% url 'custom_admin:user_management' %}" class="btn btn-admin btn-sm">
+                        <i class="bi bi-people me-2"></i>Manage Users
+                    </a>
+                    <a href="{% url 'custom_admin:video_management' %}" class="btn btn-admin btn-sm">
+                        <i class="bi bi-play-circle me-2"></i>Manage Videos
+                    </a>
+                    <a href="{% url 'custom_admin:channel_management' %}" class="btn btn-admin btn-sm">
+                        <i class="bi bi-tv me-2"></i>Manage Channels
+                    </a>
+                    <a href="{% url 'home' %}" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-eye me-2"></i>View Site
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row g-2">
+    <div class="col-lg-4">
+        <div class="admin-card">
+            <div class="card-header p-2">
+                <h6 class="card-title mb-0 small">Recent Users</h6>
+            </div>
+            <div class="card-body p-2">
+                {% if recent_users %}
+                    {% for user in recent_users|slice:":3" %}
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="flex-shrink-0">
+                            {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" class="rounded-circle" width="24" height="24">
+                            {% else %}
+                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width: 24px; height: 24px; font-size: 0.7rem;">
+                                    {{ user.first_name.0|default:user.username.0|upper }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1 ms-2">
+                            <div class="fw-semibold" style="font-size: 0.75rem;">{{ user.get_full_name|default:user.username|truncatechars:12 }}</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">{{ user.date_joined|timesince }} ago</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center small">No recent users.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="admin-card">
+            <div class="card-header p-2">
+                <h6 class="card-title mb-0 small">Recent Videos</h6>
+            </div>
+            <div class="card-body p-2">
+                {% if recent_videos %}
+                    {% for video in recent_videos|slice:":3" %}
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="flex-shrink-0">
+                            {% if video.thumbnail %}
+                                <img src="{{ video.thumbnail.url }}" class="rounded" width="30" height="20" style="object-fit: cover;">
+                            {% else %}
+                                <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="width: 30px; height: 20px;">
+                                    <i class="bi bi-play text-white" style="font-size: 0.6rem;"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1 ms-2">
+                            <div class="fw-semibold" style="font-size: 0.75rem;">{{ video.title|truncatechars:20 }}</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">{{ video.uploaded_at|timesince }} ago</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center small">No recent videos.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="admin-card">
+            <div class="card-header p-2">
+                <h6 class="card-title mb-0 small">Top Channels</h6>
+            </div>
+            <div class="card-body p-2">
+                {% if top_channels %}
+                    {% for channel in top_channels|slice:":3" %}
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="flex-shrink-0">
+                            {% if channel.avatar %}
+                                <img src="{{ channel.avatar.url }}" class="rounded-circle" width="24" height="24">
+                            {% else %}
+                                <div class="bg-info rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; color: white;">
+                                    <i class="bi bi-tv" style="font-size: 0.6rem;"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1 ms-2">
+                            <div class="fw-semibold" style="font-size: 0.75rem;">{{ channel.name|truncatechars:18 }}</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">{{ channel.subscriber_count|floatformat:0 }} subs</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center small">No channels yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Monthly Growth Chart
+    const ctx = document.getElementById('monthlyGrowthChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Users',
+                data: [12, 19, 3, 5, 2, 3],
+                borderColor: '#1e40af',
+                backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                tension: 0.4
+            }, {
+                label: 'Videos',
+                data: [2, 3, 20, 5, 1, 4],
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

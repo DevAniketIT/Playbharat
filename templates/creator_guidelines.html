@@ -1,0 +1,361 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Creator Guidelines - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="hero-section bg-gradient-primary text-white py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Creator Guidelines</h1>
+                <p class="lead mb-4">Build engaging content while maintaining the highest standards for India's premier video platform</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="{% url 'accounts:create_channel' %}" class="btn btn-light">
+                        <i class="bi bi-plus-circle me-2"></i>Start Creating
+                    </a>
+                    <a href="{% url 'monetization' %}" class="btn btn-outline-light">
+                        <i class="bi bi-currency-rupee me-2"></i>Monetization
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="text-center">
+                    <i class="bi bi-camera-video display-1" style="opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <!-- Content Policy -->
+    <section class="mb-5">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold">Content Standards</h2>
+                    <p class="text-muted">Creating content that celebrates India's diversity while maintaining platform safety</p>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body p-4">
+                                <div class="text-center mb-3">
+                                    <i class="bi bi-check-circle-fill display-5 text-success"></i>
+                                </div>
+                                <h5 class="fw-bold text-center text-success mb-3">What We Encourage</h5>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-heart-fill text-success me-2"></i>Original, creative content</li>
+                                    <li class="mb-2"><i class="bi bi-heart-fill text-success me-2"></i>Educational and informative videos</li>
+                                    <li class="mb-2"><i class="bi bi-heart-fill text-success me-2"></i>Cultural celebration and diversity</li>
+                                    <li class="mb-2"><i class="bi bi-heart-fill text-success me-2"></i>Positive community engagement</li>
+                                    <li class="mb-2"><i class="bi bi-heart-fill text-success me-2"></i>Regional language content</li>
+                                    <li class="mb-2"><i class="bi bi-heart-fill text-success me-2"></i>Skill-building and tutorials</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body p-4">
+                                <div class="text-center mb-3">
+                                    <i class="bi bi-x-circle-fill display-5 text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-center text-danger mb-3">What's Not Allowed</h5>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-x-circle text-danger me-2"></i>Hate speech or discrimination</li>
+                                    <li class="mb-2"><i class="bi bi-x-circle text-danger me-2"></i>Adult or inappropriate content</li>
+                                    <li class="mb-2"><i class="bi bi-x-circle text-danger me-2"></i>Copyright infringement</li>
+                                    <li class="mb-2"><i class="bi bi-x-circle text-danger me-2"></i>Misleading or false information</li>
+                                    <li class="mb-2"><i class="bi bi-x-circle text-danger me-2"></i>Spam or repetitive content</li>
+                                    <li class="mb-2"><i class="bi bi-x-circle text-danger me-2"></i>Dangerous or harmful activities</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Practices -->
+    <section class="mb-5 bg-light py-5 rounded">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Content Best Practices</h2>
+                <p class="text-muted">Tips to create engaging content that resonates with Indian audiences</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-flex mb-3">
+                            <i class="bi bi-camera display-4 text-primary"></i>
+                        </div>
+                        <h5 class="fw-bold">Video Quality</h5>
+                        <ul class="list-unstyled text-muted">
+                            <li>• Minimum 720p resolution</li>
+                            <li>• Clear audio quality</li>
+                            <li>• Good lighting and framing</li>
+                            <li>• Engaging thumbnails</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <div class="bg-success bg-opacity-10 rounded-circle p-3 d-inline-flex mb-3">
+                            <i class="bi bi-people display-4 text-success"></i>
+                        </div>
+                        <h5 class="fw-bold">Audience Engagement</h5>
+                        <ul class="list-unstyled text-muted">
+                            <li>• Respond to comments actively</li>
+                            <li>• Create community-focused content</li>
+                            <li>• Use regional languages</li>
+                            <li>• Share behind-the-scenes</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3 d-inline-flex mb-3">
+                            <i class="bi bi-graph-up display-4 text-warning"></i>
+                        </div>
+                        <h5 class="fw-bold">Growth Strategy</h5>
+                        <ul class="list-unstyled text-muted">
+                            <li>• Consistent upload schedule</li>
+                            <li>• Trending topics and festivals</li>
+                            <li>• Collaborate with other creators</li>
+                            <li>• Optimize titles and descriptions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Categories -->
+    <section class="mb-5">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Popular Content Categories</h2>
+            <p class="text-muted">Explore what works best on PlayBharat</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-music-note-beamed text-primary me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Music & Dance</h6>
+                                <small class="text-muted">Classical, Folk, Modern</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-0">Showcase India's rich musical heritage and contemporary styles</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-book text-success me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Education</h6>
+                                <small class="text-muted">Tutorials, Skills, Languages</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-0">Share knowledge and help others learn new skills</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-brush text-warning me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Arts & Crafts</h6>
+                                <small class="text-muted">DIY, Traditional Crafts</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-0">Creative tutorials and artistic expressions</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-trophy text-info me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Sports & Fitness</h6>
+                                <small class="text-muted">Cricket, Yoga, Workouts</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-0">Sports highlights and fitness guidance</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-camera-reels text-danger me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Entertainment</h6>
+                                <small class="text-muted">Comedy, Drama, Reviews</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-0">Create entertaining content that makes people smile</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-house-heart text-purple me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Lifestyle</h6>
+                                <small class="text-muted">Food, Travel, Fashion</small>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-0">Share your lifestyle and inspire others</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creator Resources -->
+    <section class="mb-5">
+        <div class="card border-0 shadow">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold">Creator Resources</h3>
+                    <p class="text-muted">Tools and guides to help you succeed on PlayBharat</p>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="d-flex">
+                            <div class="bg-primary bg-opacity-10 rounded p-2 me-3 flex-shrink-0">
+                                <i class="bi bi-tools text-primary"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-semibold mb-2">Content Creation Tools</h6>
+                                <p class="text-muted small mb-0">Free video editing software recommendations and tutorials</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="d-flex">
+                            <div class="bg-success bg-opacity-10 rounded p-2 me-3 flex-shrink-0">
+                                <i class="bi bi-graph-up-arrow text-success"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-semibold mb-2">Analytics Dashboard</h6>
+                                <p class="text-muted small mb-0">Track your performance and understand your audience</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="d-flex">
+                            <div class="bg-warning bg-opacity-10 rounded p-2 me-3 flex-shrink-0">
+                                <i class="bi bi-people text-warning"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-semibold mb-2">Creator Community</h6>
+                                <p class="text-muted small mb-0">Connect with other creators and share experiences</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="d-flex">
+                            <div class="bg-info bg-opacity-10 rounded p-2 me-3 flex-shrink-0">
+                                <i class="bi bi-headset text-info"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-semibold mb-2">Creator Support</h6>
+                                <p class="text-muted small mb-0">Get help from our dedicated creator support team</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Support -->
+    <section class="text-center">
+        <div class="bg-gradient-primary text-white rounded p-5">
+            <h3 class="fw-bold mb-3">Need Help Getting Started?</h3>
+            <p class="lead mb-4">Our creator support team is here to help you succeed on PlayBharat</p>
+            <div class="d-flex gap-2 justify-content-center flex-wrap">
+                <a href="{% url 'contact' %}" class="btn btn-light">
+                    <i class="bi bi-envelope me-2"></i>Contact Support
+                </a>
+                <a href="{% url 'help' %}" class="btn btn-outline-light">
+                    <i class="bi bi-question-circle me-2"></i>Help Center
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    }
+    
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+    }
+    
+    .card {
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-3px);
+    }
+    
+    .text-purple {
+        color: #7c3aed !important;
+    }
+    
+    .display-5 {
+        font-size: 2.5rem;
+        opacity: 0.8;
+    }
+</style>
+{% endblock %}

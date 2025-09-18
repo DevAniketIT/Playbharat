@@ -1,0 +1,173 @@
+{% extends 'custom_admin/admin_base.html' %}
+
+{% block page_title %}Video Management{% endblock %}
+{% block page_subtitle %}Manage all platform videos{% endblock %}
+
+{% block content %}
+<!-- Search and Filters -->
+<div class="search-filters mb-4">
+    <form method="GET" class="row g-3">
+        <div class="col-lg-5">
+            <div class="input-group">
+                <input type="search" 
+                       class="form-control" 
+                       name="search" 
+                       value="{{ search_query }}" 
+                       placeholder="Search videos by title, description, or channel...">
+                <button class="btn btn-admin" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <select name="category" class="form-select" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                {% for value, label in categories %}
+                    <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-lg-4">
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="?search={{ search_query }}&category={{ category_filter }}&filter=all" 
+                   class="filter-badge {% if filter_type == 'all' %}active{% endif %}">All</a>
+                <a href="?search={{ search_query }}&category={{ category_filter }}&filter=public" 
+                   class="filter-badge {% if filter_type == 'public' %}active{% endif %}">Public</a>
+                <a href="?search={{ search_query }}&category={{ category_filter }}&filter=private" 
+                   class="filter-badge {% if filter_type == 'private' %}active{% endif %}">Private</a>
+                <a href="?search={{ search_query }}&category={{ category_filter }}&filter=processing" 
+                   class="filter-badge {% if filter_type == 'processing' %}active{% endif %}">Processing</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Videos Table -->
+<div class="admin-table">
+        {% if videos %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th width="50">
+                            <input type="checkbox" onchange="toggleSelectAll(this)">
+                        </th>
+                        <th>Video</th>
+                        <th>Channel</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Views</th>
+                        <th>Uploaded</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for video in videos %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="items" value="{{ video.id }}">
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                {% if video.thumbnail %}
+                                    <img src="{{ video.thumbnail.url }}" class="me-2 rounded" width="60" height="40">
+                                {% else %}
+                                    <div class="bg-secondary me-2 rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 40px;">
+                                        <i class="bi bi-play text-white"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <div class="fw-semibold">{{ video.title|truncatechars:40 }}</div>
+                                    <small class="text-muted">{{ video.duration_formatted }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div>{{ video.channel.name }}</div>
+                            <small class="text-muted">{{ video.channel.handle }}</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">{{ video.get_category_display }}</span>
+                        </td>
+                        <td>
+                            {% if video.visibility == 'public' %}
+                                <span class="badge bg-success">Public</span>
+                            {% elif video.visibility == 'private' %}
+                                <span class="badge bg-danger">Private</span>
+                            {% elif video.visibility == 'unlisted' %}
+                                <span class="badge bg-warning">Unlisted</span>
+                            {% endif %}
+                            
+                            {% if video.processing_status == 'processing' %}
+                                <br><span class="badge bg-info">Processing</span>
+                            {% elif video.processing_status == 'failed' %}
+                                <br><span class="badge bg-danger">Failed</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="fw-semibold">{{ video.view_count|floatformat:0 }}</div>
+                            <small class="text-muted">{{ video.like_count }} likes</small>
+                        </td>
+                        <td>
+                            <div>{{ video.uploaded_at|date:"M d, Y" }}</div>
+                            <small class="text-muted">{{ video.uploaded_at|timesince }} ago</small>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'custom_admin:video_detail' video.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{% url 'videos:watch' video.slug %}" target="_blank" class="btn btn-sm btn-outline-secondary" title="View Video">
+                                    <i class="bi bi-play"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if videos.has_other_pages %}
+        <div class="card-footer bg-white">
+            <nav>
+                <ul class="pagination justify-content-center mb-0">
+                    {% if videos.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1&search={{ search_query }}&filter={{ filter_type }}&category={{ category_filter }}">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ videos.previous_page_number }}&search={{ search_query }}&filter={{ filter_type }}&category={{ category_filter }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Page {{ videos.number }} of {{ videos.paginator.num_pages }}
+                        </span>
+                    </li>
+                    
+                    {% if videos.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ videos.next_page_number }}&search={{ search_query }}&filter={{ filter_type }}&category={{ category_filter }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ videos.paginator.num_pages }}&search={{ search_query }}&filter={{ filter_type }}&category={{ category_filter }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="card-body text-center py-5">
+            <i class="bi bi-play-circle fs-1 text-muted mb-3"></i>
+            <h5>No videos found</h5>
+            <p class="text-muted">Try adjusting your search criteria or filters.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

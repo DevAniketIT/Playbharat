@@ -1,0 +1,19 @@
+{% if popular_searches %}
+    <div class="dropdown-menu show w-100 shadow" style="position: absolute; top: 100%; left: 0;">
+        {% for search in popular_searches %}
+            <a class="dropdown-item d-flex align-items-center" href="?q={{ search.query }}">
+                <i class="bi bi-search me-2 text-muted"></i>
+                <span>{{ search.query }}</span>
+                <span class="ms-auto text-muted small">{{ search.search_count }} searches</span>
+            </a>
+        {% endfor %}
+        
+        {% if query %}
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item d-flex align-items-center" href="?q={{ query }}">
+                <i class="bi bi-arrow-right-circle me-2 text-primary"></i>
+                Search for "<strong>{{ query }}</strong>"
+            </a>
+        {% endif %}
+    </div>
+{% endif %}

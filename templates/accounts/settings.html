@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Settings Navigation -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Settings</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'accounts:settings' %}" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-gear me-2"></i>Account
+                    </a>
+                    <a href="{% url 'accounts:privacy_settings' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-shield-check me-2"></i>Privacy
+                    </a>
+                    <a href="{% url 'accounts:notification_settings' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-bell me-2"></i>Notifications
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <!-- Account Settings -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Account Settings</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Profile Section -->
+                    <div class="border-bottom pb-4 mb-4">
+                        <h5>Profile Information</h5>
+                        <p class="text-muted">Manage your profile details</p>
+                        <a href="{% url 'accounts:edit_profile' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-pencil me-2"></i>Edit Profile
+                        </a>
+                    </div>
+                    
+                    <!-- Channel Section -->
+                    <div class="border-bottom pb-4 mb-4">
+                        <h5>Channel Management</h5>
+                        <p class="text-muted">Manage your content creator channel</p>
+                        {% if user.channel %}
+                            <a href="{% url 'accounts:edit_channel' %}" class="btn btn-outline-primary me-2">
+                                <i class="bi bi-tv me-2"></i>Edit Channel
+                            </a>
+                            <a href="{% url 'accounts:channel_dashboard' %}" class="btn btn-outline-success">
+                                <i class="bi bi-bar-chart me-2"></i>Creator Studio
+                            </a>
+                        {% else %}
+                            <a href="{% url 'accounts:create_channel' %}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>Create Channel
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Account Security -->
+                    <div class="border-bottom pb-4 mb-4">
+                        <h5>Account Security</h5>
+                        <p class="text-muted">Manage your password and security settings</p>
+                        <button class="btn btn-outline-warning" disabled>
+                            <i class="bi bi-key me-2"></i>Change Password (Coming Soon)
+                        </button>
+                    </div>
+                    
+                    <!-- Data & Privacy -->
+                    <div class="border-bottom pb-4 mb-4">
+                        <h5>Data & Privacy</h5>
+                        <p class="text-muted">Control your data and privacy settings</p>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <button class="btn btn-outline-info w-100" disabled>
+                                    <i class="bi bi-download me-2"></i>Download My Data
+                                </button>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <button class="btn btn-outline-secondary w-100" disabled>
+                                    <i class="bi bi-trash me-2"></i>Delete My Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Language & Region -->
+                    <div class="mb-4">
+                        <h5>Language & Region</h5>
+                        <p class="text-muted">Set your preferred language and region</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="language" class="form-label">Language</label>
+                                    <select class="form-select" id="language" disabled>
+                                        <option selected>English</option>
+                                        <option>हिन्दी (Hindi)</option>
+                                        <option>தமிழ் (Tamil)</option>
+                                        <option>తెలుగు (Telugu)</option>
+                                        <option>বাংলা (Bengali)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="region" class="form-label">Region</label>
+                                    <select class="form-select" id="region" disabled>
+                                        <option selected>India</option>
+                                        <option>United States</option>
+                                        <option>United Kingdom</option>
+                                        <option>Canada</option>
+                                        <option>Australia</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <small class="text-muted">Note: Language and region settings are coming soon!</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

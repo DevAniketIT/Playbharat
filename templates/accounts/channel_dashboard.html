@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}Creator Studio - {{ channel.name }} - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- Channel Header -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center">
+                    {% if channel.profile_picture %}
+                        <img src="{{ channel.profile_picture.url }}" alt="{{ channel.name }}" class="rounded-circle" width="80" height="80">
+                    {% else %}
+                        <i class="bi bi-tv display-4 text-muted"></i>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <h3>{{ channel.name }}</h3>
+                    <p class="text-muted mb-1">{{ channel.handle }}</p>
+                    <p class="mb-0">{{ total_subscribers }} subscribers • {{ channel.videos.count }} videos</p>
+                </div>
+                <div class="col-md-2 text-end">
+                    <a href="{% url 'accounts:edit_channel' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil me-1"></i>Edit Channel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-eye display-4 text-primary"></i>
+                    <h4 class="mt-2">{{ total_views|default:0 }}</h4>
+                    <p class="text-muted">Total Views</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-people display-4 text-success"></i>
+                    <h4 class="mt-2">{{ total_subscribers }}</h4>
+                    <p class="text-muted">Subscribers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-play display-4 text-info"></i>
+                    <h4 class="mt-2">{{ channel.videos.count }}</h4>
+                    <p class="text-muted">Videos</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-heart display-4 text-danger"></i>
+                    <h4 class="mt-2">0</h4>
+                    <p class="text-muted">Likes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'videos:upload' %}" class="btn btn-primary w-100">
+                                <i class="bi bi-plus-circle me-2"></i>Upload Video
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'videos:manage' %}" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-collection-play me-2"></i>Manage Videos
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="#" class="btn btn-outline-secondary w-100">
+                                <i class="bi bi-graph-up me-2"></i>Analytics
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="#" class="btn btn-outline-info w-100">
+                                <i class="bi bi-chat-dots me-2"></i>Comments
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Videos -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Videos</h5>
+                    <a href="{% url 'videos:manage' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_videos %}
+                        <div class="row">
+                            {% for video in recent_videos %}
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="card h-100">
+                                        {% if video.thumbnail %}
+                                            <img src="{{ video.thumbnail.url }}" class="card-img-top" alt="{{ video.title }}">
+                                        {% else %}
+                                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                                <i class="bi bi-play-circle display-4 text-muted"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="card-body">
+                                            <h6 class="card-title">{{ video.title|truncatechars:50 }}</h6>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small class="text-muted">{{ video.view_count }} views</small>
+                                                <span class="badge bg-{{ video.visibility|yesno:'success,warning' }}">
+                                                    {{ video.get_visibility_display }}
+                                                </span>
+                                            </div>
+                                            <small class="text-muted">{{ video.uploaded_at|timesince }} ago</small>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="btn-group w-100" role="group">
+                                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-outline-secondary btn-sm">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-outline-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-camera-video display-1 text-muted"></i>
+                            <h5 class="mt-3">No videos yet</h5>
+                            <p class="text-muted">Upload your first video to get started!</p>
+                            <a href="{% url 'videos:upload' %}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>Upload Video
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

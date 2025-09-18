@@ -1,0 +1,203 @@
+{% extends 'custom_admin/admin_base.html' %}
+
+{% block page_title %}Channel Management{% endblock %}
+{% block page_subtitle %}Manage all platform channels{% endblock %}
+
+{% block content %}
+<!-- Search and Filters -->
+<div class="search-filters mb-4">
+    <form method="GET" class="row g-3">
+        <div class="col-lg-4">
+            <div class="input-group">
+                <input type="search" 
+                       class="form-control" 
+                       name="search" 
+                       value="{{ search_query }}" 
+                       placeholder="Search channels by name, handle, or owner...">
+                <button class="btn btn-admin" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <select name="category" class="form-select" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                {% for value, label in categories %}
+                    <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-lg-5">
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="?search={{ search_query }}&category={{ category_filter }}&filter=all" 
+                   class="filter-badge {% if filter_type == 'all' %}active{% endif %}">All</a>
+                <a href="?search={{ search_query }}&category={{ category_filter }}&filter=active" 
+                   class="filter-badge {% if filter_type == 'active' %}active{% endif %}">Active</a>
+                <a href="?search={{ search_query }}&category={{ category_filter }}&filter=inactive" 
+                   class="filter-badge {% if filter_type == 'inactive' %}active{% endif %}">Inactive</a>
+                <a href="?search={{ search_query }}&category={{ category_filter }}&filter=monetized" 
+                   class="filter-badge {% if filter_type == 'monetized' %}active{% endif %}">Monetized</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Channels Table -->
+<div class="admin-table">
+        {% if channels %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th width="50">
+                            <input type="checkbox" onchange="toggleSelectAll(this)">
+                        </th>
+                        <th>Channel</th>
+                        <th>Owner</th>
+                        <th>Category</th>
+                        <th>Subscribers</th>
+                        <th>Videos</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for channel in channels %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="items" value="{{ channel.id }}">
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                {% if channel.avatar %}
+                                    <img src="{{ channel.avatar.url }}" class="rounded-circle me-2" width="40" height="40">
+                                {% else %}
+                                    <div class="bg-info rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="bi bi-tv text-white"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <div class="fw-semibold">{{ channel.name }}</div>
+                                    <small class="text-muted">{{ channel.handle }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                {% if channel.user.profile_picture %}
+                                    <img src="{{ channel.user.profile_picture.url }}" class="rounded-circle me-2" width="30" height="30">
+                                {% else %}
+                                    <div class="bg-secondary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
+                                        <i class="bi bi-person text-white small"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <div class="small">{{ channel.user.get_full_name|default:channel.user.username }}</div>
+                                    <small class="text-muted">@{{ channel.user.username }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">{{ channel.get_category_display }}</span>
+                        </td>
+                        <td>
+                            <div class="fw-semibold">{{ channel.subscriber_count|floatformat:0 }}</div>
+                            <small class="text-muted">subscribers</small>
+                        </td>
+                        <td>
+                            <div class="fw-semibold">{{ channel.total_videos }}</div>
+                            <small class="text-muted">videos</small>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column gap-1">
+                                {% if channel.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                                
+                                {% if channel.is_monetized %}
+                                    <span class="badge bg-warning">Monetized</span>
+                                {% endif %}
+                                
+                                {% if channel.user.is_verified_creator %}
+                                    <span class="badge bg-info">Verified</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <div>{{ channel.created_at|date:"M d, Y" }}</div>
+                            <small class="text-muted">{{ channel.created_at|timesince }} ago</small>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'custom_admin:channel_detail' channel.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ channel.get_absolute_url }}" target="_blank" class="btn btn-sm btn-outline-secondary" title="View Channel">
+                                    <i class="bi bi-tv"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if channels.has_other_pages %}
+        <div class="card-footer bg-white">
+            <nav>
+                <ul class="pagination justify-content-center mb-0">
+                    {% if channels.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1&search={{ search_query }}&filter={{ filter_type }}&category={{ category_filter }}">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ channels.previous_page_number }}&search={{ search_query }}&filter={{ filter_type }}&category={{ category_filter }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Page {{ channels.number }} of {{ channels.paginator.num_pages }}
+                        </span>
+                    </li>
+                    
+                    {% if channels.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ channels.next_page_number }}&search={{ search_query }}&filter={{ filter_type }}&category={{ category_filter }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ channels.paginator.num_pages }}&search={{ search_query }}&filter={{ filter_type }}&category={{ category_filter }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="card-body text-center py-5">
+            <i class="bi bi-tv fs-1 text-muted mb-3"></i>
+            <h5>No channels found</h5>
+            <p class="text-muted">Try adjusting your search criteria or filters.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card stats-card text-center">
+            <div class="card-body">
+                <h4 class="text-primary">{{ channels.paginator.count }}</h4>
+                <p class="text-muted mb-0">Total Results</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

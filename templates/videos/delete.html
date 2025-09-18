@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Video - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Delete Video
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-warning me-2"></i>
+                        <strong>Warning:</strong> This action cannot be undone. Once deleted, your video and all its data will be permanently removed.
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5>You are about to delete:</h5>
+                        <div class="border rounded p-3 bg-light">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {% if object.thumbnail %}
+                                        <img src="{{ object.thumbnail.url }}" alt="{{ object.title }}" class="img-fluid rounded">
+                                    {% else %}
+                                        <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 120px;">
+                                            <i class="bi bi-camera-video text-white display-4"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-8">
+                                    <h6 class="fw-bold">{{ object.title }}</h6>
+                                    <p class="text-muted mb-2">{{ object.description|truncatechars:100 }}</p>
+                                    <div class="d-flex gap-3 text-sm text-muted">
+                                        <span><i class="bi bi-eye me-1"></i>{{ object.view_count }} views</span>
+                                        <span><i class="bi bi-clock me-1"></i>{{ object.uploaded_at|timesince }} ago</span>
+                                        <span class="badge bg-primary">{{ object.get_category_display }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'videos:manage' %}" class="btn btn-secondary btn-lg">
+                                <i class="bi bi-arrow-left me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="bi bi-trash me-2"></i>Delete Video
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,521 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PlayBharat - India's Video Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    Welcome to PlayBharat
+                </h1>
+                <p class="lead mb-4">
+                    India's premier video platform celebrating our diverse culture, creativity, and stories. 
+                    Discover amazing content in multiple Indian languages.
+                </p>
+                <div class="d-flex gap-3">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Join PlayBharat
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'search:explore' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-compass me-2"></i>Explore Content
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-video-placeholder bg-light rounded-3 d-flex align-items-center justify-content-center" style="height: 300px;">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-play-circle fs-1"></i>
+                        <p class="mt-2">Featured Video Placeholder</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Categories -->
+<section class="categories-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Explore by Category</h2>
+        <div class="row">
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <a href="{% url 'search:category' 'music' %}" class="text-decoration-none">
+                    <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-music-note-beamed fs-1 text-primary mb-2"></i>
+                        <h6 class="mb-0">Music</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <a href="{% url 'search:category' 'entertainment' %}" class="text-decoration-none">
+                    <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-film fs-1 text-danger mb-2"></i>
+                        <h6 class="mb-0">Entertainment</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <a href="{% url 'search:category' 'news' %}" class="text-decoration-none">
+                    <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-newspaper fs-1 text-info mb-2"></i>
+                        <h6 class="mb-0">News</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <a href="{% url 'search:category' 'education' %}" class="text-decoration-none">
+                    <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-book fs-1 text-success mb-2"></i>
+                        <h6 class="mb-0">Education</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <a href="{% url 'search:category' 'sports' %}" class="text-decoration-none">
+                    <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-trophy fs-1 text-warning mb-2"></i>
+                        <h6 class="mb-0">Sports</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2 mb-4">
+                <a href="{% url 'search:category' 'cooking' %}" class="text-decoration-none">
+                    <div class="category-card text-center p-3 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-egg-fried fs-1 text-orange mb-2"></i>
+                        <h6 class="mb-0">Cooking</h6>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'search:categories' %}" class="btn btn-outline-primary">
+                <i class="bi bi-grid me-2"></i>View All Categories
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Trending Videos -->
+<section class="trending-section py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>
+                <i class="bi bi-fire text-danger me-2"></i>Trending Now
+            </h2>
+            <a href="{% url 'search:trending' %}" class="btn btn-outline-primary">View All</a>
+        </div>
+        
+        <div class="row" id="trending-videos">
+            <!-- Video placeholders - will be populated by HTMX -->
+            {% for i in "123456789012" %}
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2 mb-4">
+                <div class="video-card">
+                    <div class="video-thumbnail-placeholder bg-light rounded position-relative">
+                        <div class="ratio ratio-16x9">
+                            <div class="d-flex align-items-center justify-content-center bg-secondary text-white rounded">
+                                <i class="bi bi-play-circle fs-1"></i>
+                            </div>
+                        </div>
+                        <span class="badge bg-dark position-absolute bottom-0 end-0 m-2">5:30</span>
+                    </div>
+                    <div class="video-info mt-2">
+                        <h6 class="video-title mb-1 text-truncate">Sample Video Title {{ forloop.counter }}</h6>
+                        <p class="text-muted small mb-1">Sample Channel</p>
+                        <p class="text-muted small mb-0">10K views • 2 days ago</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Regional Content -->
+<section class="regional-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Regional Content</h2>
+        <div class="row">
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="regional-card bg-white rounded shadow-sm overflow-hidden">
+                    <div class="regional-header bg-saffron text-white p-3 text-center">
+                        <h5 class="mb-0">हिन्दी</h5>
+                        <small>Hindi Content</small>
+                    </div>
+                    <div class="p-3">
+                        <p class="text-muted small mb-2">Popular in Hindi</p>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-fire text-danger me-2"></i>
+                            <span class="small">1.2M videos trending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="regional-card bg-white rounded shadow-sm overflow-hidden">
+                    <div class="regional-header bg-success text-white p-3 text-center">
+                        <h5 class="mb-0">தமிழ்</h5>
+                        <small>Tamil Content</small>
+                    </div>
+                    <div class="p-3">
+                        <p class="text-muted small mb-2">Popular in Tamil</p>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-fire text-danger me-2"></i>
+                            <span class="small">850K videos trending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="regional-card bg-white rounded shadow-sm overflow-hidden">
+                    <div class="regional-header bg-info text-white p-3 text-center">
+                        <h5 class="mb-0">তেলুগু</h5>
+                        <small>Telugu Content</small>
+                    </div>
+                    <div class="p-3">
+                        <p class="text-muted small mb-2">Popular in Telugu</p>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-fire text-danger me-2"></i>
+                            <span class="small">720K videos trending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="regional-card bg-white rounded shadow-sm overflow-hidden">
+                    <div class="regional-header bg-primary text-white p-3 text-center">
+                        <h5 class="mb-0">বাংলা</h5>
+                        <small>Bengali Content</small>
+                    </div>
+                    <div class="p-3">
+                        <p class="text-muted small mb-2">Popular in Bengali</p>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-fire text-danger me-2"></i>
+                            <span class="small">690K videos trending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'search:regional' %}" class="btn btn-outline-primary">
+                <i class="bi bi-globe-asia-australia me-2"></i>Explore All Languages
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action for Creators -->
+<section class="creator-cta py-5 bg-gradient-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="mb-3">Ready to Share Your Story?</h3>
+                <p class="lead mb-0">
+                    Join thousands of Indian creators who are already sharing their passion with the world. 
+                    Start your journey on PlayBharat today!
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'accounts:create_channel' %}" class="btn btn-light btn-lg">
+                    <i class="bi bi-plus-circle me-2"></i>Create Channel
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #FF9933 0%, #138808 100%);
+    }
+    
+    .bg-saffron {
+        background-color: #FF9933;
+    }
+    
+    .category-card {
+        transition: transform 0.2s ease-in-out;
+        cursor: pointer;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .regional-card {
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .regional-card:hover {
+        transform: translateY(-3px);
+    }
+    
+    .video-card {
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .video-card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .video-thumbnail-placeholder {
+        background: linear-gradient(45deg, #f8f9fa 25%, transparent 25%), 
+                    linear-gradient(-45deg, #f8f9fa 25%, transparent 25%), 
+                    linear-gradient(45deg, transparent 75%, #f8f9fa 75%), 
+                    linear-gradient(-45deg, transparent 75%, #f8f9fa 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+    
+    .text-orange {
+        color: #fd7e14;
+    }
+    
+    /* Animation Styles */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+    }
+    
+    .animate-in {
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+    
+    /* Video Overlay Styles */
+    .video-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .video-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .video-overlay-content {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 2rem;
+        max-width: 800px;
+        width: 90%;
+        color: white;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+    }
+    
+    .video-overlay.show .video-overlay-content {
+        transform: scale(1);
+    }
+    
+    /* Enhanced hover effects */
+    .hero-video-placeholder {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .hero-video-placeholder:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: scale(1.02);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Parallax container */
+    .hero-section {
+        will-change: transform;
+    }
+    
+    /* Loading pulse animation */
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+    
+    .loading-pulse {
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Enhanced homepage functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('HomePage loaded successfully');
+        
+        // Initialize homepage features
+        initializeVideoCards();
+        initializeCategoryCards();
+        initializeRegionalCards();
+        initializeHeroSection();
+        loadTrendingVideos();
+    });
+    
+    function initializeVideoCards() {
+        document.querySelectorAll('.video-card').forEach((card, index) => {
+            // Add staggered animation
+            card.style.animationDelay = `${index * 0.1}s`;
+            card.classList.add('fade-in-up');
+            
+            card.addEventListener('click', function() {
+                // Animate click
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                    // Navigate to video page
+                    console.log('Video clicked:', this.dataset.videoId);
+                }, 100);
+            });
+        });
+    }
+    
+    function initializeCategoryCards() {
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+                this.style.boxShadow = '0 12px 28px rgba(0,0,0,0.15)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = '';
+            });
+        });
+    }
+    
+    function initializeRegionalCards() {
+        document.querySelectorAll('.regional-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const language = this.querySelector('h5').textContent.trim();
+                PlayBharat.utils.showToast(`Exploring ${language} content...`, 'info');
+            });
+        });
+    }
+    
+    function initializeHeroSection() {
+        const heroVideo = document.querySelector('.hero-video-placeholder');
+        if (heroVideo) {
+            heroVideo.addEventListener('click', function() {
+                // Create and play demo video overlay
+                createVideoOverlay();
+            });
+        }
+        
+        // Parallax effect for hero section
+        window.addEventListener('scroll', function() {
+            const hero = document.querySelector('.hero-section');
+            if (hero) {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                hero.style.transform = `translateY(${rate}px)`;
+            }
+        });
+    }
+    
+    function loadTrendingVideos() {
+        // Simulate loading trending videos with HTMX
+        setTimeout(() => {
+            const trendingContainer = document.getElementById('trending-videos');
+            if (trendingContainer) {
+                // Add loading animation
+                trendingContainer.style.opacity = '0.8';
+                
+                // Simulate data loading
+                setTimeout(() => {
+                    trendingContainer.style.opacity = '1';
+                    PlayBharat.utils.showToast('Trending videos updated!', 'success', 2000);
+                }, 1000);
+            }
+        }, 2000);
+    }
+    
+    function createVideoOverlay() {
+        const overlay = document.createElement('div');
+        overlay.className = 'video-overlay';
+        overlay.innerHTML = `
+            <div class="video-overlay-content">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Featured Video Preview</h4>
+                    <button class="btn btn-outline-light btn-sm" onclick="closeVideoOverlay()">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="ratio ratio-16x9 mb-3">
+                    <div class="bg-dark rounded d-flex align-items-center justify-content-center">
+                        <div class="text-center text-white">
+                            <i class="bi bi-play-circle fs-1 mb-2"></i>
+                            <p>Demo video would play here</p>
+                            <button class="btn btn-primary" onclick="PlayBharat.utils.showToast('Video playing...', 'info')">
+                                <i class="bi bi-play me-2"></i>Play Demo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-light">This would showcase a featured video from PlayBharat creators.</p>
+            </div>
+        `;
+        
+        document.body.appendChild(overlay);
+        requestAnimationFrame(() => {
+            overlay.classList.add('show');
+        });
+    }
+    
+    window.closeVideoOverlay = function() {
+        const overlay = document.querySelector('.video-overlay');
+        if (overlay) {
+            overlay.classList.remove('show');
+            setTimeout(() => overlay.remove(), 300);
+        }
+    };
+    
+    // Intersection Observer for animations
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        // Observe elements for animation
+        document.querySelectorAll('.regional-card, .category-card').forEach(el => {
+            observer.observe(el);
+        });
+    }
+</script>
+{% endblock %}

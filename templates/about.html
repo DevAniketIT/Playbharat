@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="bg-white rounded shadow p-5">
+                <h1 class="display-4 text-primary mb-4">About PlayBharat</h1>
+                
+                <div class="row align-items-center mb-5">
+                    <div class="col-md-8">
+                        <p class="lead">PlayBharat is India's premier video sharing platform, bringing together creators and audiences from across the diverse Indian subcontinent.</p>
+                        
+                        <p>Our mission is to democratize content creation and provide a platform where every voice can be heard, every story can be told, and every talent can shine.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="bi bi-play-circle-fill text-primary" style="font-size: 6rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-5">
+                    <div class="col-md-4 text-center mb-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="bi bi-people-fill text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h4 class="mt-3">Community First</h4>
+                        <p class="text-muted">Building a vibrant community of creators and viewers who support and inspire each other.</p>
+                    </div>
+                    
+                    <div class="col-md-4 text-center mb-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="bi bi-globe-asia-australia text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h4 class="mt-3">Local Focus</h4>
+                        <p class="text-muted">Celebrating Indian culture, languages, and stories while connecting with global audiences.</p>
+                    </div>
+                    
+                    <div class="col-md-4 text-center mb-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="bi bi-lightbulb-fill text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h4 class="mt-3">Innovation</h4>
+                        <p class="text-muted">Using cutting-edge technology to deliver the best video streaming experience.</p>
+                    </div>
+                </div>
+                
+                <hr class="my-5">
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="text-secondary mb-3">Our Story</h3>
+                        <p>Founded in 2024, PlayBharat emerged from a simple idea: India needed a video platform that truly understood and celebrated its diversity. From Bollywood entertainment to regional folk music, from educational content to cooking tutorials, we provide a space for all forms of creative expression.</p>
+                        
+                        <p>Today, we're proud to host thousands of creators who reach millions of viewers across India and beyond.</p>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h3 class="text-secondary mb-3">Why Choose PlayBharat?</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Support for multiple Indian languages</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Creator-friendly monetization options</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Advanced video quality and streaming</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Community-driven content discovery</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mobile-first design for India's needs</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-5">
+                    <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg me-3">Join Our Community</a>
+                    <a href="{% url 'home' %}" class="btn btn-outline-primary btn-lg">Explore Videos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

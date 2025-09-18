@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}All Categories - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1>
+                <i class="bi bi-grid display-6 text-primary me-3"></i>
+                All Categories
+            </h1>
+            <p class="lead text-muted">Explore content by category</p>
+        </div>
+    </div>
+    
+    <!-- Categories Grid -->
+    {% if categories %}
+        <div class="row">
+            {% for category in categories %}
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                    <a href="{% url 'search:category' category=category.code %}" class="text-decoration-none">
+                        <div class="card h-100 category-card-large">
+                            <div class="card-body text-center p-4">
+                                <!-- Category Icon -->
+                                {% if category.code == 'music' %}
+                                    <i class="bi bi-music-note-beamed display-2 text-primary mb-3"></i>
+                                {% elif category.code == 'entertainment' %}
+                                    <i class="bi bi-film display-2 text-danger mb-3"></i>
+                                {% elif category.code == 'education' %}
+                                    <i class="bi bi-book display-2 text-success mb-3"></i>
+                                {% elif category.code == 'news' %}
+                                    <i class="bi bi-newspaper display-2 text-info mb-3"></i>
+                                {% elif category.code == 'sports' %}
+                                    <i class="bi bi-trophy display-2 text-warning mb-3"></i>
+                                {% elif category.code == 'gaming' %}
+                                    <i class="bi bi-controller display-2 text-purple mb-3"></i>
+                                {% elif category.code == 'technology' %}
+                                    <i class="bi bi-cpu display-2 text-dark mb-3"></i>
+                                {% elif category.code == 'lifestyle' %}
+                                    <i class="bi bi-heart display-2 text-pink mb-3"></i>
+                                {% elif category.code == 'comedy' %}
+                                    <i class="bi bi-emoji-laughing display-2 text-orange mb-3"></i>
+                                {% else %}
+                                    <i class="bi bi-collection-play display-2 text-secondary mb-3"></i>
+                                {% endif %}
+                                
+                                <h4>{{ category.name }}</h4>
+                                <p class="text-muted">{{ category.count }} videos</p>
+                                
+                                <!-- Progress Bar -->
+                                <div class="progress mb-2" style="height: 4px;">
+                                    <div class="progress-bar" style="width: {{ category.percentage }}%"></div>
+                                </div>
+                                <small class="text-muted">{{ category.percentage }}% of total content</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Default Categories (if no data) -->
+        <div class="row">
+            {% for category_info in default_categories %}
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                    <a href="{% url 'search:category' category=category_info.code %}" class="text-decoration-none">
+                        <div class="card h-100 category-card-large">
+                            <div class="card-body text-center p-4">
+                                <i class="bi bi-{{ category_info.icon }} display-2 text-{{ category_info.color }} mb-3"></i>
+                                <h4>{{ category_info.name }}</h4>
+                                <p class="text-muted">Explore {{ category_info.name|lower }} content</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <!-- Call to Action -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light text-center py-4">
+                <div class="card-body">
+                    <h3>Can't find what you're looking for?</h3>
+                    <p class="text-muted mb-4">Use our advanced search to discover more content</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'search:search' %}" class="btn btn-primary">
+                            <i class="bi bi-search me-2"></i>Advanced Search
+                        </a>
+                        <a href="{% url 'search:trending' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-fire me-2"></i>View Trending
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.category-card-large {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.category-card-large:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+}
+
+.text-purple {
+    color: #6f42c1;
+}
+
+.text-pink {
+    color: #e83e8c;
+}
+
+.text-orange {
+    color: #fd7e14;
+}
+</style>
+
+<script>
+// Add some interactivity to category cards
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryCards = document.querySelectorAll('.category-card-large');
+    
+    categoryCards.forEach((card, index) => {
+        // Staggered animation
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease-out';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+        
+        // Click animation
+        card.addEventListener('click', function(e) {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+    });
+});
+</script>
+{% endblock %}

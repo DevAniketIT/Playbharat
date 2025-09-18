@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Privacy Settings - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{% url 'accounts:settings' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-gear me-2"></i>General Settings
+                </a>
+                <a href="{% url 'accounts:privacy_settings' %}" class="list-group-item list-group-item-action active">
+                    <i class="bi bi-shield-lock me-2"></i>Privacy Settings
+                </a>
+                <a href="{% url 'accounts:notification_settings' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-bell me-2"></i>Notifications
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">
+                        <i class="bi bi-shield-lock me-2"></i>Privacy Settings
+                    </h4>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <h6>Profile Visibility</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="show_email" name="show_email" {% if user.show_email %}checked{% endif %}>
+                                <label class="form-check-label" for="show_email">
+                                    Show email address on public profile
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="show_phone" name="show_phone" {% if user.show_phone %}checked{% endif %}>
+                                <label class="form-check-label" for="show_phone">
+                                    Show phone number on profile
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h6>Content Settings</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="allow_comments" name="allow_comments" checked>
+                                <label class="form-check-label" for="allow_comments">
+                                    Allow comments on my videos
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="allow_messages" name="allow_messages" checked>
+                                <label class="form-check-label" for="allow_messages">
+                                    Allow direct messages
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check me-2"></i>Save Privacy Settings
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

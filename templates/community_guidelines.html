@@ -1,0 +1,326 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Community Guidelines - PlayBharat{% endblock %}
+{% block description %}PlayBharat Community Guidelines - Learn about our community standards, content policies, and how to create a safe, respectful environment for all users.{% endblock %}
+
+{% block content %}
+<div class="community-guidelines-page">
+    <!-- Hero Section -->
+    <section class="hero-section bg-gradient text-white py-5" style="background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">Community Guidelines</h1>
+                    <p class="lead mb-4">Building a safe, respectful, and vibrant community for all PlayBharat users</p>
+                    <div class="community-stats d-flex flex-wrap gap-4">
+                        <div class="stat-item">
+                            <h4 class="fw-bold mb-0">35+</h4>
+                            <small class="opacity-75">Active Users</small>
+                        </div>
+                        <div class="stat-item">
+                            <h4 class="fw-bold mb-0">14</h4>
+                            <small class="opacity-75">Channels</small>
+                        </div>
+                        <div class="stat-item">
+                            <h4 class="fw-bold mb-0">13</h4>
+                            <small class="opacity-75">Languages</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="bi bi-shield-check display-1 text-white opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guidelines Overview -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="guidelines-intro text-center mb-5">
+                        <h2 class="mb-4">Our Community Values</h2>
+                        <p class="lead text-muted">PlayBharat is built on the foundation of respect, creativity, and cultural celebration. These guidelines help maintain a positive environment where Indian creators can share their stories and connect with audiences.</p>
+                    </div>
+
+                    <!-- Core Principles -->
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-4">
+                            <div class="principle-card text-center p-4 bg-light rounded h-100">
+                                <i class="bi bi-heart-fill text-danger display-5 mb-3"></i>
+                                <h5 class="fw-bold">Respect</h5>
+                                <p class="text-muted small">Treat all community members with dignity and kindness</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="principle-card text-center p-4 bg-light rounded h-100">
+                                <i class="bi bi-palette-fill text-primary display-5 mb-3"></i>
+                                <h5 class="fw-bold">Creativity</h5>
+                                <p class="text-muted small">Express yourself authentically while respecting others</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="principle-card text-center p-4 bg-light rounded h-100">
+                                <i class="bi bi-globe text-success display-5 mb-3"></i>
+                                <h5 class="fw-bold">Inclusivity</h5>
+                                <p class="text-muted small">Welcome creators from all backgrounds and regions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Guidelines -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <h2 class="text-center mb-5">Content Guidelines</h2>
+
+                    <!-- Acceptable Content -->
+                    <div class="guideline-section mb-5">
+                        <div class="row align-items-start">
+                            <div class="col-lg-2 text-center mb-4">
+                                <div class="guideline-icon p-3 bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center">
+                                    <i class="bi bi-check-circle-fill display-6"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-10">
+                                <h3 class="text-success mb-4">✅ What We Encourage</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2">🎓 <strong>Educational Content</strong> - Tutorials, how-to guides, language learning</li>
+                                            <li class="mb-2">🎭 <strong>Entertainment</strong> - Comedy, music, dance, storytelling</li>
+                                            <li class="mb-2">🏛️ <strong>Cultural Content</strong> - Traditional arts, festivals, heritage</li>
+                                            <li class="mb-2">📰 <strong>News & Current Affairs</strong> - Informative, factual reporting</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2">🏃 <strong>Sports & Fitness</strong> - Games, workouts, health tips</li>
+                                            <li class="mb-2">🍳 <strong>Food & Cooking</strong> - Recipes, food culture, nutrition</li>
+                                            <li class="mb-2">💼 <strong>Business & Technology</strong> - Entrepreneurship, tech reviews</li>
+                                            <li class="mb-2">🎨 <strong>Art & Crafts</strong> - DIY projects, creative tutorials</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prohibited Content -->
+                    <div class="guideline-section mb-5">
+                        <div class="row align-items-start">
+                            <div class="col-lg-2 text-center mb-4">
+                                <div class="guideline-icon p-3 bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center">
+                                    <i class="bi bi-x-circle-fill display-6"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-10">
+                                <h3 class="text-danger mb-4">❌ Prohibited Content</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2">⚠️ <strong>Hate Speech</strong> - Content targeting individuals or groups based on race, religion, caste, gender, or sexuality</li>
+                                            <li class="mb-2">🔞 <strong>Adult Content</strong> - Sexually explicit material, nudity, or suggestive content</li>
+                                            <li class="mb-2">⚔️ <strong>Violence</strong> - Graphic violence, terrorism, or content promoting harm</li>
+                                            <li class="mb-2">🚫 <strong>Harassment</strong> - Bullying, doxxing, or targeted harassment</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2">📋 <strong>Spam & Deception</strong> - Misleading content, fake news, or spam</li>
+                                            <li class="mb-2">💊 <strong>Dangerous Content</strong> - Promoting illegal drugs, dangerous activities</li>
+                                            <li class="mb-2">©️ <strong>Copyright Violations</strong> - Using copyrighted material without permission</li>
+                                            <li class="mb-2">🎯 <strong>Targeted Harassment</strong> - Coordinated attacks or doxxing</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Community Behavior -->
+                    <div class="guideline-section mb-5">
+                        <div class="row align-items-start">
+                            <div class="col-lg-2 text-center mb-4">
+                                <div class="guideline-icon p-3 bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center">
+                                    <i class="bi bi-people-fill display-6"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-10">
+                                <h3 class="text-primary mb-4">🤝 Community Behavior</h3>
+                                <div class="behavior-guidelines">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="fw-bold text-success">✅ Do:</h5>
+                                            <ul>
+                                                <li>Be respectful in comments and interactions</li>
+                                                <li>Provide constructive feedback</li>
+                                                <li>Report inappropriate content</li>
+                                                <li>Support fellow creators</li>
+                                                <li>Use appropriate language for all ages</li>
+                                                <li>Respect cultural and religious sensitivities</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="fw-bold text-danger">❌ Don't:</h5>
+                                            <ul>
+                                                <li>Use abusive or offensive language</li>
+                                                <li>Spam comments or messages</li>
+                                                <li>Share personal information of others</li>
+                                                <li>Impersonate other users or celebrities</li>
+                                                <li>Engage in political flame wars</li>
+                                                <li>Make discriminatory comments</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enforcement -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="text-center mb-5">Enforcement & Consequences</h2>
+                    
+                    <div class="enforcement-steps">
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="enforcement-card text-center p-4 bg-warning bg-opacity-10 border border-warning rounded">
+                                    <i class="bi bi-exclamation-triangle-fill text-warning display-6 mb-3"></i>
+                                    <h5 class="fw-bold">Warning</h5>
+                                    <p class="text-muted small">First-time minor violations receive a warning and educational guidance</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="enforcement-card text-center p-4 bg-danger bg-opacity-10 border border-danger rounded">
+                                    <i class="bi bi-pause-circle-fill text-danger display-6 mb-3"></i>
+                                    <h5 class="fw-bold">Temporary Suspension</h5>
+                                    <p class="text-muted small">Repeated violations or serious breaches result in temporary account suspension</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="enforcement-card text-center p-4 bg-dark bg-opacity-10 border border-dark rounded">
+                                    <i class="bi bi-x-circle-fill text-dark display-6 mb-3"></i>
+                                    <h5 class="fw-bold">Permanent Ban</h5>
+                                    <p class="text-muted small">Severe or repeated violations result in permanent account termination</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="appeals-section mt-5 p-4 bg-light rounded">
+                        <h4 class="fw-bold mb-3">Appeals Process</h4>
+                        <p>If you believe your content was incorrectly flagged or your account was unfairly penalized:</p>
+                        <ol>
+                            <li>Review these Community Guidelines to understand the violation</li>
+                            <li>Submit an appeal through our <a href="{% url 'contact' %}">Contact Form</a></li>
+                            <li>Provide detailed explanation and context for your content</li>
+                            <li>Wait for our review team to respond within 48-72 hours</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reporting -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="mb-4">Help Keep Our Community Safe</h2>
+                    <p class="lead mb-4">Community members play a crucial role in maintaining a positive environment. If you encounter content that violates these guidelines, please report it.</p>
+                    
+                    <div class="reporting-methods row g-4">
+                        <div class="col-md-6">
+                            <div class="reporting-card p-4 bg-white rounded shadow-sm">
+                                <i class="bi bi-flag-fill text-warning display-6 mb-3"></i>
+                                <h5 class="fw-bold">Report Content</h5>
+                                <p class="text-muted">Use the report button on any video or comment</p>
+                                <a href="{% url 'report' %}" class="btn btn-warning">Report Now</a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="reporting-card p-4 bg-white rounded shadow-sm">
+                                <i class="bi bi-envelope-fill text-primary display-6 mb-3"></i>
+                                <h5 class="fw-bold">Contact Support</h5>
+                                <p class="text-muted">For serious violations or detailed reports</p>
+                                <a href="{% url 'contact' %}" class="btn btn-primary">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Message -->
+    <section class="py-4 bg-primary text-white">
+        <div class="container text-center">
+            <p class="mb-0 lead">Thank you for helping make PlayBharat a welcoming space for all Indian creators! 🇮🇳</p>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .community-guidelines-page .principle-card {
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .community-guidelines-page .principle-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-color: transparent;
+    }
+    
+    .community-guidelines-page .enforcement-card {
+        transition: all 0.3s ease;
+    }
+    
+    .community-guidelines-page .enforcement-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .community-guidelines-page .reporting-card {
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .community-guidelines-page .reporting-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .community-guidelines-page .guideline-section {
+        padding: 2rem 0;
+    }
+    
+    .community-guidelines-page .guideline-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .community-guidelines-page .stat-item {
+        text-align: center;
+        min-width: 80px;
+    }
+</style>
+{% endblock %}

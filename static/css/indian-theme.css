@@ -1,0 +1,300 @@
+/* PlayBharat Indian Theme */
+
+/* Indian Cultural Colors */
+:root {
+    --saffron: #FF9933;
+    --white: #FFFFFF;
+    --green: #138808;
+    --chakra-blue: #000080;
+    --hindi-gold: #DAA520;
+    --temple-red: #DC143C;
+    --peacock-blue: #005F69;
+    --turmeric-yellow: #E4D00A;
+    --lotus-pink: #F8BBD0;
+}
+
+/* Indian Typography */
+.hindi-text {
+    font-family: 'Noto Sans Devanagari', 'Noto Sans Hindi', sans-serif;
+}
+
+.tamil-text {
+    font-family: 'Noto Sans Tamil', sans-serif;
+}
+
+.telugu-text {
+    font-family: 'Noto Sans Telugu', sans-serif;
+}
+
+.bengali-text {
+    font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+/* Indian Flag Inspired Elements */
+.flag-gradient {
+    background: linear-gradient(to bottom, 
+        var(--saffron) 0%, 
+        var(--saffron) 33.33%, 
+        var(--white) 33.33%, 
+        var(--white) 66.66%, 
+        var(--green) 66.66%, 
+        var(--green) 100%);
+}
+
+.chakra-symbol::before {
+    content: "☸";
+    color: var(--chakra-blue);
+    font-size: 1.5em;
+    margin-right: 8px;
+}
+
+/* Festival & Cultural Themes */
+.diwali-glow {
+    box-shadow: 0 0 20px rgba(218, 165, 32, 0.6);
+    animation: diwaliGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes diwaliGlow {
+    from { box-shadow: 0 0 10px rgba(218, 165, 32, 0.4); }
+    to { box-shadow: 0 0 30px rgba(218, 165, 32, 0.8); }
+}
+
+.holi-colors {
+    background: linear-gradient(45deg, 
+        #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, 
+        #FFEAA7, #DDA0DD, #FF7675, #74B9FF);
+    background-size: 400% 400%;
+    animation: holiColors 8s ease-in-out infinite;
+}
+
+@keyframes holiColors {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Indian Patterns */
+.mandala-border {
+    border: 3px solid var(--saffron);
+    border-radius: 50%;
+    position: relative;
+}
+
+.mandala-border::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 2px dotted var(--green);
+    border-radius: 50%;
+}
+
+.paisley-bg {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FF9933' fill-opacity='0.1'%3E%3Cpath d='M30 30c0-16.569 13.431-30 30-30v60c-16.569 0-30-13.431-30-30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Regional Content Cards */
+.regional-card.hindi {
+    border-left: 4px solid var(--saffron);
+    background: linear-gradient(135deg, #fff8e1, #ffffff);
+}
+
+.regional-card.tamil {
+    border-left: 4px solid var(--temple-red);
+    background: linear-gradient(135deg, #fce4ec, #ffffff);
+}
+
+.regional-card.telugu {
+    border-left: 4px solid var(--turmeric-yellow);
+    background: linear-gradient(135deg, #fffde7, #ffffff);
+}
+
+.regional-card.bengali {
+    border-left: 4px solid var(--peacock-blue);
+    background: linear-gradient(135deg, #e0f2f1, #ffffff);
+}
+
+/* Cultural Icons */
+.icon-om::before {
+    content: "🕉️";
+    margin-right: 8px;
+}
+
+.icon-lotus::before {
+    content: "🪷";
+    margin-right: 8px;
+}
+
+.icon-namaste::before {
+    content: "🙏";
+    margin-right: 8px;
+}
+
+.icon-temple::before {
+    content: "🛕";
+    margin-right: 8px;
+}
+
+.icon-diya::before {
+    content: "🪔";
+    margin-right: 8px;
+}
+
+/* Festival Specific Styling */
+.diwali-theme {
+    background: radial-gradient(circle, #2c1810, #1a0f08);
+    color: var(--hindi-gold);
+}
+
+.holi-theme {
+    background: var(--white);
+    color: #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.holi-theme::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 20%, #FF6B6B 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, #4ECDC4 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, #45B7D1 0%, transparent 50%);
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+/* Indian Music & Dance Elements */
+.classical-music {
+    border-image: linear-gradient(45deg, var(--saffron), var(--green)) 1;
+    border-style: solid;
+    border-width: 2px;
+}
+
+.bollywood-style {
+    background: linear-gradient(45deg, #FF6B6B, #FFD93D);
+    background-size: 200% 200%;
+    animation: bollywoodShine 3s ease-in-out infinite;
+}
+
+@keyframes bollywoodShine {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Regional Language Indicators */
+.lang-indicator {
+    position: relative;
+    padding-left: 30px;
+}
+
+.lang-indicator.hindi::before {
+    content: "हि";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--saffron);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.lang-indicator.tamil::before {
+    content: "த";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--temple-red);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.lang-indicator.telugu::before {
+    content: "తె";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--turmeric-yellow);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Traditional Patterns */
+.kolam-pattern {
+    background-image: repeating-conic-gradient(from 0deg at 50% 50%, 
+        var(--saffron) 0deg 60deg, 
+        transparent 60deg 120deg);
+    opacity: 0.1;
+}
+
+.rangoli-border {
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                repeating-linear-gradient(45deg, var(--saffron) 0%, var(--green) 25%, var(--saffron) 50%) border-box;
+}
+
+/* Celebration Animations */
+.celebration-pulse {
+    animation: celebrationPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes celebrationPulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 153, 51, 0.4);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(255, 153, 51, 0);
+    }
+}
+
+/* Responsive Cultural Elements */
+@media (max-width: 768px) {
+    .mandala-border::before {
+        display: none;
+    }
+    
+    .lang-indicator {
+        padding-left: 25px;
+    }
+    
+    .lang-indicator::before {
+        font-size: 0.7rem;
+        padding: 1px 4px;
+    }
+}
+
+/* Dark Mode Cultural Adaptations */
+@media (prefers-color-scheme: dark) {
+    .regional-card.hindi {
+        background: linear-gradient(135deg, #2c1810, #1a1a1a);
+    }
+    
+    .regional-card.tamil {
+        background: linear-gradient(135deg, #2c1018, #1a1a1a);
+    }
+    
+    .regional-card.telugu {
+        background: linear-gradient(135deg, #2c2810, #1a1a1a);
+    }
+    
+    .regional-card.bengali {
+        background: linear-gradient(135deg, #102c28, #1a1a1a);
+    }
+}

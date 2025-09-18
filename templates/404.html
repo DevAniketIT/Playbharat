@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Page Not Found - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container-fluid d-flex align-items-center justify-content-center min-vh-100" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+    <div class="row justify-content-center w-100">
+        <div class="col-lg-6 col-md-8 text-center">
+            <div class="error-container">
+                <!-- Animated 404 Icon -->
+                <div class="error-icon mb-4">
+                    <div class="error-animation">
+                        <i class="bi bi-camera-video display-1 text-primary opacity-75"></i>
+                        <div class="error-overlay">
+                            <span class="error-code">404</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <h1 class="display-4 fw-bold text-dark mb-3">Oops! Content Not Found</h1>
+                <p class="lead text-muted mb-4">
+                    The video or page you're looking for might have been moved, deleted, or doesn't exist.
+                </p>
+
+                <!-- Search Suggestions -->
+                <div class="search-suggestion mb-4">
+                    <h5 class="text-primary mb-3">What would you like to do?</h5>
+                    <div class="row g-3 justify-content-center">
+                        <div class="col-sm-6 col-md-4">
+                            <a href="{% url 'home' %}" class="btn btn-primary w-100 py-3">
+                                <i class="bi bi-house mb-2 d-block fs-4"></i>
+                                Go to Home
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <a href="{% url 'videos:trending' %}" class="btn btn-outline-primary w-100 py-3">
+                                <i class="bi bi-fire mb-2 d-block fs-4"></i>
+                                Browse Trending
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <a href="#" onclick="history.back()" class="btn btn-outline-secondary w-100 py-3">
+                                <i class="bi bi-arrow-left mb-2 d-block fs-4"></i>
+                                Go Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-container mb-4">
+                    <h6 class="text-muted mb-3">Or search for something specific:</h6>
+                    <form method="GET" action="{% url 'search:index' %}" class="d-flex justify-content-center">
+                        <div class="input-group" style="max-width: 400px;">
+                            <input type="search" 
+                                   class="form-control form-control-lg" 
+                                   name="q"
+                                   placeholder="Search videos, creators..."
+                                   value="{{ request.GET.q }}">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Popular Categories -->
+                <div class="popular-categories">
+                    <h6 class="text-muted mb-3">Popular Categories</h6>
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <a href="#" class="btn btn-sm btn-light border">Music</a>
+                        <a href="#" class="btn btn-sm btn-light border">Entertainment</a>
+                        <a href="#" class="btn btn-sm btn-light border">Education</a>
+                        <a href="#" class="btn btn-sm btn-light border">Sports</a>
+                        <a href="#" class="btn btn-sm btn-light border">News</a>
+                        <a href="#" class="btn btn-sm btn-light border">Regional</a>
+                    </div>
+                </div>
+
+                <!-- Help Link -->
+                <div class="mt-5">
+                    <p class="text-muted small">
+                        Still having trouble? 
+                        <a href="{% url 'contact' %}" class="text-primary text-decoration-none">Contact our support team</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .error-container {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .error-animation {
+        position: relative;
+        display: inline-block;
+    }
+
+    .error-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 153, 51, 0.9);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1.2rem;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); }
+        50% { transform: translate(-50%, -50%) scale(1.05); }
+    }
+
+    .btn {
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .min-vh-100 {
+        min-height: calc(100vh - 140px); /* Account for header/footer */
+    }
+</style>
+{% endblock %}

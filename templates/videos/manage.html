@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Videos - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2>
+                <i class="bi bi-collection-play me-2"></i>
+                My Videos
+            </h2>
+            <p class="text-muted">Manage your uploaded videos</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <a href="{% url 'videos:upload' %}" class="btn btn-primary btn-lg">
+                <i class="bi bi-plus-circle me-2"></i>Upload New Video
+            </a>
+        </div>
+    </div>
+    
+    <!-- Filter and Search -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" class="form-control" placeholder="Search your videos..." id="video-search">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="filter-visibility">
+                                <option value="">All Videos</option>
+                                <option value="public">Public</option>
+                                <option value="unlisted">Unlisted</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="filter-status">
+                                <option value="">All Statuses</option>
+                                <option value="processing">Processing</option>
+                                <option value="completed">Published</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="sort-by">
+                                <option value="-uploaded_at">Newest First</option>
+                                <option value="uploaded_at">Oldest First</option>
+                                <option value="-view_count">Most Viewed</option>
+                                <option value="title">Title A-Z</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Videos List -->
+    {% if videos %}
+        <div class="row">
+            {% for video in videos %}
+                <div class="col-12 mb-4" data-video-id="{{ video.id }}">
+                    <div class="card video-card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <!-- Thumbnail -->
+                                <div class="col-md-2">
+                                    <div class="position-relative">
+                                        {% if video.thumbnail %}
+                                            <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" 
+                                                 class="img-fluid rounded" style="max-height: 100px; width: 100%;">
+                                        {% else %}
+                                            <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                                 style="height: 100px;">
+                                                <i class="bi bi-play-circle display-4 text-muted"></i>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <!-- Processing Status -->
+                                        {% if video.processing_status != 'completed' %}
+                                            <span class="badge bg-warning position-absolute top-0 start-0 m-1">
+                                                {% if video.processing_status == 'processing' %}
+                                                    <i class="bi bi-arrow-clockwise spin"></i> Processing
+                                                {% elif video.processing_status == 'failed' %}
+                                                    <i class="bi bi-exclamation-triangle"></i> Failed
+                                                {% endif %}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Video Info -->
+                                <div class="col-md-6">
+                                    <h5 class="card-title mb-1">
+                                        {{ video.title|truncatechars:60 }}
+                                    </h5>
+                                    
+                                    <div class="mb-2">
+                                        <span class="badge bg-{{ video.visibility|yesno:'success,warning,secondary' }}">
+                                            <i class="bi bi-{% if video.visibility == 'public' %}globe{% elif video.visibility == 'unlisted' %}link{% else %}lock{% endif %} me-1"></i>
+                                            {{ video.get_visibility_display }}
+                                        </span>
+                                        
+                                        {% if video.category %}
+                                            <span class="badge bg-light text-dark">{{ video.get_category_display }}</span>
+                                        {% endif %}
+                                        
+                                        {% if video.age_restriction %}
+                                            <span class="badge bg-danger">18+</span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    {% if video.description %}
+                                        <p class="text-muted small mb-2">
+                                            {{ video.description|truncatechars:100 }}
+                                        </p>
+                                    {% endif %}
+                                    
+                                    <div class="text-muted small">
+                                        <i class="bi bi-calendar me-1"></i>{{ video.uploaded_at|date:"M j, Y" }}
+                                        {% if video.duration %}
+                                            • <i class="bi bi-clock me-1"></i>{{ video.duration }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Stats -->
+                                <div class="col-md-2 text-center">
+                                    <div class="mb-2">
+                                        <i class="bi bi-eye text-primary me-1"></i>
+                                        <strong>{{ video.view_count|default:0 }}</strong>
+                                        <br><small class="text-muted">Views</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <i class="bi bi-heart text-danger me-1"></i>
+                                        <strong>{{ video.like_count|default:0 }}</strong>
+                                        <br><small class="text-muted">Likes</small>
+                                    </div>
+                                    <div>
+                                        <i class="bi bi-chat text-info me-1"></i>
+                                        <strong>{{ video.comment_count|default:0 }}</strong>
+                                        <br><small class="text-muted">Comments</small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Actions -->
+                                <div class="col-md-2 text-end">
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" 
+                                                type="button" data-bs-toggle="dropdown">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            {% if video.processing_status == 'completed' %}
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="bi bi-play me-2"></i>Watch
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="bi bi-graph-up me-2"></i>Analytics
+                                                    </a>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                            {% endif %}
+                                            <li>
+                                                <a class="dropdown-item" href="{% url 'videos:edit' pk=video.pk %}">
+                                                    <i class="bi bi-pencil me-2"></i>Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" onclick="copyVideoLink('{{ video.slug }}')">
+                                                    <i class="bi bi-link me-2"></i>Copy Link
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" onclick="downloadVideo('{{ video.id }}')">
+                                                    <i class="bi bi-download me-2"></i>Download
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item text-danger" href="{% url 'videos:delete' pk=video.pk %}">
+                                                    <i class="bi bi-trash me-2"></i>Delete
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+            <nav aria-label="Video pagination">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <!-- No Videos -->
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="bi bi-camera-video display-1 text-muted"></i>
+                    <h4 class="mt-3">No videos uploaded yet</h4>
+                    <p class="text-muted mb-4">Start sharing your creativity with the PlayBharat community</p>
+                    <a href="{% url 'videos:upload' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i>Upload Your First Video
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.video-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.video-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+function copyVideoLink(slug) {
+    const url = `${window.location.origin}/watch/${slug}/`;
+    navigator.clipboard.writeText(url).then(function() {
+        // Show toast notification
+        showToast('Video link copied to clipboard!', 'success');
+    });
+}
+
+function downloadVideo(videoId) {
+    // Implement video download functionality
+    showToast('Download feature coming soon!', 'info');
+}
+
+function showToast(message, type) {
+    // Simple toast notification
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
+    toast.style.zIndex = '9999';
+    toast.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    }, 3000);
+}
+
+// Search and filter functionality
+document.getElementById('video-search').addEventListener('input', function() {
+    filterVideos();
+});
+
+document.getElementById('filter-visibility').addEventListener('change', function() {
+    filterVideos();
+});
+
+document.getElementById('filter-status').addEventListener('change', function() {
+    filterVideos();
+});
+
+function filterVideos() {
+    const searchTerm = document.getElementById('video-search').value.toLowerCase();
+    const visibilityFilter = document.getElementById('filter-visibility').value;
+    const statusFilter = document.getElementById('filter-status').value;
+    
+    const videoCards = document.querySelectorAll('[data-video-id]');
+    
+    videoCards.forEach(card => {
+        const title = card.querySelector('.card-title').textContent.toLowerCase();
+        const visibility = card.querySelector('.badge').textContent.toLowerCase();
+        
+        let shouldShow = true;
+        
+        // Text search
+        if (searchTerm && !title.includes(searchTerm)) {
+            shouldShow = false;
+        }
+        
+        // Visibility filter
+        if (visibilityFilter && !visibility.includes(visibilityFilter)) {
+            shouldShow = false;
+        }
+        
+        // Show/hide card
+        card.style.display = shouldShow ? 'block' : 'none';
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,682 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ video.title }} - PlayBharat{% endblock %}
+
+{% block extra_css %}
+<style>
+.video-player-container {
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.video-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    padding: 20px 15px 10px;
+    transition: opacity 0.3s ease;
+}
+
+.video-controls.hidden {
+    opacity: 0;
+}
+
+.progress-container {
+    position: relative;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #ff6b35;
+    border-radius: 2px;
+    transition: width 0.1s linear;
+}
+
+.control-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.control-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.volume-slider {
+    width: 60px;
+}
+
+.quality-menu {
+    position: relative;
+}
+
+.stats-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 12px;
+    display: none;
+}
+
+.engagement-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.engagement-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: #333;
+}
+
+.engagement-btn:hover {
+    background: #f8f9fa;
+    color: #333;
+    text-decoration: none;
+}
+
+.engagement-btn.active {
+    background: #e3f2fd;
+    border-color: #2196f3;
+    color: #1976d2;
+}
+
+.engagement-count {
+    font-size: 0.8em;
+    margin-top: 2px;
+}
+
+.video-description {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.comment-form {
+    border-top: 1px solid #dee2e6;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.comment {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-avatar {
+    flex-shrink: 0;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.related-video {
+    display: flex;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s;
+}
+
+.related-video:hover {
+    background: #f8f9fa;
+    color: inherit;
+    text-decoration: none;
+}
+
+.related-thumbnail {
+    flex-shrink: 0;
+    position: relative;
+}
+
+.related-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.related-title {
+    font-size: 0.9em;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.related-meta {
+    font-size: 0.8em;
+    color: #666;
+    line-height: 1.2;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-3">
+    <div class="row">
+        <!-- Video Player Column -->
+        <div class="col-lg-8">
+            <!-- Video Player -->
+            <div class="video-player-container mb-3">
+                <video id="video-player" class="w-100" style="max-height: 70vh;" poster="{{ video.thumbnail.url }}">
+                    {% if video.video_file %}
+                        <source src="{{ video.video_file.url }}" type="video/mp4">
+                    {% endif %}
+                    Your browser does not support the video tag.
+                </video>
+                
+                <!-- Custom Controls -->
+                <div class="video-controls" id="video-controls">
+                    <!-- Progress Bar -->
+                    <div class="progress-container" id="progress-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    
+                    <!-- Control Buttons -->
+                    <div class="control-buttons">
+                        <div class="control-group">
+                            <button class="control-btn" id="play-pause-btn">
+                                <i class="bi bi-play-fill fs-5"></i>
+                            </button>
+                            <button class="control-btn" id="mute-btn">
+                                <i class="bi bi-volume-up fs-6"></i>
+                            </button>
+                            <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="100">
+                            <span class="text-white small" id="time-display">0:00 / 0:00</span>
+                        </div>
+                        
+                        <div class="control-group">
+                            <div class="dropdown quality-menu">
+                                <button class="control-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-gear fs-6"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" data-quality="1080p">1080p HD</a></li>
+                                    <li><a class="dropdown-item" href="#" data-quality="720p">720p HD</a></li>
+                                    <li><a class="dropdown-item active" href="#" data-quality="480p">480p</a></li>
+                                    <li><a class="dropdown-item" href="#" data-quality="360p">360p</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#" id="stats-toggle">Show stats</a></li>
+                                </ul>
+                            </div>
+                            <button class="control-btn" id="fullscreen-btn">
+                                <i class="bi bi-fullscreen fs-6"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Overlay -->
+                <div class="stats-overlay" id="stats-overlay">
+                    <div>Resolution: <span id="current-resolution">480p</span></div>
+                    <div>Buffered: <span id="buffered-info">0%</span></div>
+                    <div>Network: <span id="network-info">Good</span></div>
+                    <div>Dropped frames: <span id="dropped-frames">0</span></div>
+                </div>
+            </div>
+            
+            <!-- Video Info -->
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="flex-grow-1 me-3">
+                    <h2>{{ video.title }}</h2>
+                    <div class="d-flex align-items-center text-muted">
+                        <span>{{ video.view_count|default:0 }} views</span>
+                        <span class="mx-2">•</span>
+                        <span>{{ video.uploaded_at|date:"M j, Y" }}</span>
+                        {% if video.category %}
+                            <span class="mx-2">•</span>
+                            <span class="badge bg-light text-dark">{{ video.get_category_display }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Engagement Buttons -->
+                <div class="engagement-buttons">
+                    <button class="engagement-btn" id="like-btn" 
+                            hx-post="/api/videos/{{ video.id }}/like/" 
+                            hx-target="#like-count">
+                        <i class="bi bi-hand-thumbs-up fs-5"></i>
+                        <span class="engagement-count" id="like-count">{{ video.like_count|default:0 }}</span>
+                    </button>
+                    
+                    <button class="engagement-btn" id="dislike-btn"
+                            hx-post="/api/videos/{{ video.id }}/dislike/"
+                            hx-target="#dislike-count">
+                        <i class="bi bi-hand-thumbs-down fs-5"></i>
+                        <span class="engagement-count" id="dislike-count">{{ video.dislike_count|default:0 }}</span>
+                    </button>
+                    
+                    <div class="dropdown">
+                        <button class="engagement-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-share fs-5"></i>
+                            <span class="engagement-count">Share</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="copyVideoLink()">
+                                <i class="bi bi-link me-2"></i>Copy link
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="shareToWhatsApp()">
+                                <i class="bi bi-whatsapp me-2"></i>WhatsApp
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="shareToTwitter()">
+                                <i class="bi bi-twitter me-2"></i>Twitter
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="shareToFacebook()">
+                                <i class="bi bi-facebook me-2"></i>Facebook
+                            </a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="dropdown">
+                        <button class="engagement-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-plus-square fs-5"></i>
+                            <span class="engagement-count">Save</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">
+                                <i class="bi bi-clock-history me-2"></i>Watch later
+                            </a></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="bi bi-collection-play me-2"></i>Add to playlist
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Channel Info -->
+            <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center flex-grow-1">
+                    {% if video.channel.profile_picture %}
+                        <img src="{{ video.channel.profile_picture.url }}" alt="{{ video.channel.name }}" 
+                             class="rounded-circle me-3" width="48" height="48">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" 
+                             style="width: 48px; height: 48px;">
+                            <i class="bi bi-tv text-white"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div>
+                        <h6 class="mb-0">
+                            <a href="#" class="text-decoration-none">{{ video.channel.name }}</a>
+                        </h6>
+                        <small class="text-muted">{{ video.channel.subscriber_count }} subscribers</small>
+                    </div>
+                </div>
+                
+                {% if user.is_authenticated and user != video.channel.user %}
+                    <button class="btn btn-danger" id="subscribe-btn"
+                            hx-post="/api/channels/{{ video.channel.id }}/subscribe/"
+                            hx-target="#subscribe-btn">
+                        <i class="bi bi-plus-circle me-2"></i>Subscribe
+                    </button>
+                {% endif %}
+            </div>
+            
+            <!-- Video Description -->
+            {% if video.description %}
+                <div class="video-description">
+                    <div id="description-text">
+                        {{ video.description|slice:":200" }}{% if video.description|length > 200 %}...{% endif %}
+                    </div>
+                    {% if video.description|length > 200 %}
+                        <button class="btn btn-link p-0 mt-2" onclick="toggleDescription()">
+                            <span id="show-more-text">Show more</span>
+                        </button>
+                    {% endif %}
+                </div>
+            {% endif %}
+            
+            <!-- Comments Section -->
+            <div class="comment-form">
+                <h5>Comments ({{ comments.count }})</h5>
+                
+                {% if user.is_authenticated and video.allow_comments %}
+                    <form class="mb-4" hx-post="/api/videos/{{ video.id }}/comments/" hx-target="#comments-list" hx-swap="afterbegin">
+                        {% csrf_token %}
+                        <div class="d-flex gap-3">
+                            {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" 
+                                     class="rounded-circle" width="32" height="32">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                                     style="width: 32px; height: 32px;">
+                                    <i class="bi bi-person text-white fs-6"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="flex-grow-1">
+                                <input type="text" class="form-control" placeholder="Add a comment..." 
+                                       name="content" required>
+                                <div class="mt-2 d-none" id="comment-actions">
+                                    <button type="submit" class="btn btn-primary btn-sm me-2">Comment</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="cancelComment()">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                {% elif not user.is_authenticated %}
+                    <div class="alert alert-info">
+                        <a href="{% url 'accounts:login' %}">Sign in</a> to leave a comment.
+                    </div>
+                {% endif %}
+                
+                <!-- Comments List -->
+                <div id="comments-list">
+                    {% for comment in comments %}
+                        <div class="comment">
+                            <div class="comment-avatar">
+                                {% if comment.user.profile_picture %}
+                                    <img src="{{ comment.user.profile_picture.url }}" alt="{{ comment.user.username }}" 
+                                         class="rounded-circle" width="32" height="32">
+                                {% else %}
+                                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                                         style="width: 32px; height: 32px;">
+                                        <i class="bi bi-person text-white fs-6"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="comment-content">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <strong>{{ comment.user.get_full_name|default:comment.user.username }}</strong>
+                                    <small class="text-muted">{{ comment.created_at|timesince }} ago</small>
+                                </div>
+                                <p class="mb-2">{{ comment.content }}</p>
+                                
+                                <div class="comment-actions">
+                                    <button class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-hand-thumbs-up me-1"></i>{{ comment.like_count|default:0 }}
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-hand-thumbs-down me-1"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-link">Reply</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-chat display-4"></i>
+                            <p>No comments yet. Be the first to comment!</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="sticky-top" style="top: 1rem;">
+                <h5 class="mb-3">Up next</h5>
+                
+                <!-- Related Videos -->
+                {% for related_video in related_videos %}
+                    <a href="#" class="related-video mb-3">
+                        <div class="related-thumbnail">
+                            {% if related_video.thumbnail %}
+                                <img src="{{ related_video.thumbnail.url }}" alt="{{ related_video.title }}" 
+                                     class="rounded" width="120" height="68">
+                            {% else %}
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                     style="width: 120px; height: 68px;">
+                                    <i class="bi bi-play-circle fs-4 text-muted"></i>
+                                </div>
+                            {% endif %}
+                            
+                            {% if related_video.duration %}
+                                <span class="badge bg-dark position-absolute bottom-0 end-0 m-1" style="font-size: 0.7em;">
+                                    {{ related_video.duration }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="related-info">
+                            <div class="related-title">{{ related_video.title }}</div>
+                            <div class="related-meta">
+                                <div>{{ related_video.channel.name }}</div>
+                                <div>{{ related_video.view_count|default:0 }} views • {{ related_video.uploaded_at|timesince }} ago</div>
+                            </div>
+                        </div>
+                    </a>
+                {% empty %}
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-collection-play display-4"></i>
+                        <p>No related videos found</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const video = document.getElementById('video-player');
+    const controls = document.getElementById('video-controls');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const timeDisplay = document.getElementById('time-display');
+    const volumeSlider = document.getElementById('volume-slider');
+    const muteBtn = document.getElementById('mute-btn');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    
+    let controlsTimeout;
+    
+    // Play/Pause functionality
+    playPauseBtn.addEventListener('click', function() {
+        if (video.paused) {
+            video.play();
+            playPauseBtn.innerHTML = '<i class="bi bi-pause-fill fs-5"></i>';
+        } else {
+            video.pause();
+            playPauseBtn.innerHTML = '<i class="bi bi-play-fill fs-5"></i>';
+        }
+    });
+    
+    // Progress bar
+    video.addEventListener('timeupdate', function() {
+        const progress = (video.currentTime / video.duration) * 100;
+        progressBar.style.width = progress + '%';
+        
+        // Update time display
+        const currentTime = formatTime(video.currentTime);
+        const duration = formatTime(video.duration);
+        timeDisplay.textContent = `${currentTime} / ${duration}`;
+    });
+    
+    // Seek functionality
+    progressContainer.addEventListener('click', function(e) {
+        const rect = progressContainer.getBoundingClientRect();
+        const pos = (e.clientX - rect.left) / rect.width;
+        video.currentTime = pos * video.duration;
+    });
+    
+    // Volume control
+    volumeSlider.addEventListener('input', function() {
+        video.volume = this.value / 100;
+        updateVolumeIcon();
+    });
+    
+    muteBtn.addEventListener('click', function() {
+        if (video.muted) {
+            video.muted = false;
+            volumeSlider.value = video.volume * 100;
+        } else {
+            video.muted = true;
+            volumeSlider.value = 0;
+        }
+        updateVolumeIcon();
+    });
+    
+    function updateVolumeIcon() {
+        const icon = muteBtn.querySelector('i');
+        if (video.muted || video.volume === 0) {
+            icon.className = 'bi bi-volume-mute fs-6';
+        } else if (video.volume < 0.5) {
+            icon.className = 'bi bi-volume-down fs-6';
+        } else {
+            icon.className = 'bi bi-volume-up fs-6';
+        }
+    }
+    
+    // Fullscreen
+    fullscreenBtn.addEventListener('click', function() {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else {
+            video.requestFullscreen();
+        }
+    });
+    
+    // Show/hide controls
+    video.addEventListener('mousemove', showControls);
+    video.addEventListener('click', function() {
+        playPauseBtn.click();
+    });
+    
+    function showControls() {
+        controls.classList.remove('hidden');
+        clearTimeout(controlsTimeout);
+        controlsTimeout = setTimeout(function() {
+            if (!video.paused) {
+                controls.classList.add('hidden');
+            }
+        }, 3000);
+    }
+    
+    // Format time helper
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    // Stats toggle
+    document.getElementById('stats-toggle').addEventListener('click', function() {
+        const statsOverlay = document.getElementById('stats-overlay');
+        statsOverlay.style.display = statsOverlay.style.display === 'none' ? 'block' : 'none';
+    });
+    
+    // Track view
+    setTimeout(function() {
+        fetch(`/api/videos/${video.dataset.videoId || '{{ video.id }}'}/view/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        });
+    }, 10000); // Count view after 10 seconds
+});
+
+// Utility functions
+function toggleDescription() {
+    const descText = document.getElementById('description-text');
+    const showMoreText = document.getElementById('show-more-text');
+    
+    if (descText.textContent.includes('...')) {
+        descText.textContent = '{{ video.description|escapejs }}';
+        showMoreText.textContent = 'Show less';
+    } else {
+        descText.textContent = '{{ video.description|slice:":200"|escapejs }}' + 
+                              {% if video.description|length > 200 %}'...'{% else %}''{% endif %};
+        showMoreText.textContent = 'Show more';
+    }
+}
+
+function copyVideoLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(function() {
+        showToast('Video link copied to clipboard!');
+    });
+}
+
+function shareToWhatsApp() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('{{ video.title|escapejs }}');
+    window.open(`https://wa.me/?text=${text} ${url}`, '_blank');
+}
+
+function shareToTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('{{ video.title|escapejs }}');
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+}
+
+function shareToFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+}
+
+function showToast(message) {
+    // Simple toast notification
+    const toast = document.createElement('div');
+    toast.className = 'alert alert-success position-fixed top-0 end-0 m-3';
+    toast.style.zIndex = '9999';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    }, 3000);
+}
+</script>
+{% endblock %}

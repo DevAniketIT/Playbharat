@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sign In - PlayBharat{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth-styles.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/auth-scripts.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-container">
+        <!-- Left Panel - Brand Section -->
+        <div class="auth-brand-panel" style="flex: 0 0 60%;">
+            <!-- Floating Icons -->
+            <div class="auth-floating-icons">
+                <i class="bi bi-play-circle floating-icon" style="font-size: 4rem;"></i>
+                <i class="bi bi-camera-video floating-icon" style="font-size: 3rem;"></i>
+                <i class="bi bi-heart-fill floating-icon" style="font-size: 2.5rem;"></i>
+            </div>
+            
+            <div class="auth-brand-content">
+                <!-- Logo -->
+                <div class="auth-brand-logo">
+                    <i class="bi bi-play-btn-fill text-warning me-2"></i>PlayBharat
+                </div>
+                
+                <!-- Tagline -->
+                <div class="auth-brand-tagline">
+                    India's Premier Video Platform
+                </div>
+                
+                <!-- Features List -->
+                <ul class="auth-brand-features">
+                    <li>
+                        <i class="bi bi-globe-asia-australia"></i>
+                        Connect with millions of Indian creators
+                    </li>
+                    <li>
+                        <i class="bi bi-translate"></i>
+                        Content in 15+ regional languages
+                    </li>
+                    <li>
+                        <i class="bi bi-star-fill"></i>
+                        Discover trending videos and shows
+                    </li>
+                    <li>
+                        <i class="bi bi-currency-rupee"></i>
+                        Earn money from your content
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Right Panel - Login Form -->
+        <div class="auth-form-panel" style="flex: 0 0 40%;">
+            <div class="auth-form-container">
+                <!-- Form Header -->
+                <div class="auth-form-header">
+                    <h1 class="auth-form-title">Welcome Back!</h1>
+                    <p class="auth-form-subtitle">Sign in to your PlayBharat account to continue your journey</p>
+                </div>
+                
+                <!-- Social Login Buttons -->
+                <div class="auth-social-buttons" style="grid-template-columns: 1fr 1fr; margin-bottom: 1.5rem;">
+                    <a href="#" class="auth-social-button google">
+                        <i class="bi bi-google"></i>
+                        Google
+                    </a>
+                    <a href="#" class="auth-social-button facebook">
+                        <i class="bi bi-facebook"></i>
+                        Facebook
+                    </a>
+                </div>
+                
+                <!-- Divider -->
+                <div class="auth-divider">
+                    <span>or continue with email</span>
+                </div>
+                
+                <!-- Login Form -->
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+                    
+                    <!-- Email Field -->
+                    <div class="auth-form-group">
+                        <label class="auth-form-label" for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                        <div class="position-relative">
+                            <i class="bi bi-person auth-input-icon"></i>
+                            <input type="text" 
+                                   class="auth-form-input" 
+                                   id="{{ form.username.id_for_label }}" 
+                                   name="{{ form.username.name }}" 
+                                   placeholder="Enter your username or email"
+                                   value="{{ form.username.value|default_if_none:'' }}"
+                                   required>
+                        </div>
+                        {% if form.username.errors %}
+                            <div class="auth-error-message">{{ form.username.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Password Field -->
+                    <div class="auth-form-group">
+                        <label class="auth-form-label" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                        <div class="position-relative">
+                            <i class="bi bi-lock auth-input-icon"></i>
+                            <input type="password" 
+                                   class="auth-form-input" 
+                                   id="{{ form.password.id_for_label }}" 
+                                   name="{{ form.password.name }}" 
+                                   placeholder="Enter your password"
+                                   required>
+                        </div>
+                        {% if form.password.errors %}
+                            <div class="auth-error-message">{{ form.password.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="auth-remember-me">
+                            <input type="checkbox" id="remember_me" name="remember_me" class="form-check-input">
+                            <label for="remember_me" class="form-check-label">Remember me</label>
+                        </div>
+                        <div class="auth-forgot-password">
+                            <a href="#">Forgot password?</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="auth-form-button">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                    </button>
+                    
+                    <!-- Non-field errors -->
+                    {% if form.non_field_errors %}
+                        <div class="auth-error-message mt-3 text-center">
+                            {{ form.non_field_errors.0 }}
+                        </div>
+                    {% endif %}
+                </form>
+                
+                <!-- Footer -->
+                <div class="auth-form-footer">
+                    <p>
+                        Don't have an account? 
+                        <a href="{% url 'accounts:register' %}">Create one now</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,402 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Report Content - PlayBharat{% endblock %}
+{% block description %}Report inappropriate content on PlayBharat. Help us maintain a safe and respectful community by reporting violations of our community guidelines.{% endblock %}
+
+{% block content %}
+<div class="report-page">
+    <!-- Hero Section -->
+    <section class="hero-section bg-warning text-dark py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">Report Content</h1>
+                    <p class="lead mb-4">Help us maintain a safe and respectful community by reporting content that violates our guidelines</p>
+                    <div class="alert alert-info mb-0">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <strong>Your reports help protect the community.</strong> All reports are reviewed by our moderation team within 24 hours.
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="bi bi-flag-fill display-1 text-warning-emphasis opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Form Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="report-form-container bg-white rounded shadow-sm p-4">
+                        <h2 class="text-center mb-4">Submit a Report</h2>
+                        
+                        <form class="report-form">
+                            {% csrf_token %}
+                            
+                            <!-- Report Type -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">What are you reporting? <span class="text-danger">*</span></label>
+                                <div class="report-types">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="report_type" id="report_video" value="video" required>
+                                        <label class="form-check-label" for="report_video">
+                                            <i class="bi bi-play-circle me-2"></i>Video
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="report_type" id="report_comment" value="comment">
+                                        <label class="form-check-label" for="report_comment">
+                                            <i class="bi bi-chat-dots me-2"></i>Comment
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="report_type" id="report_user" value="user">
+                                        <label class="form-check-label" for="report_user">
+                                            <i class="bi bi-person me-2"></i>User Profile
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="report_type" id="report_channel" value="channel">
+                                        <label class="form-check-label" for="report_channel">
+                                            <i class="bi bi-tv me-2"></i>Channel
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Content URL -->
+                            <div class="mb-4">
+                                <label for="content_url" class="form-label fw-bold">Content URL <span class="text-danger">*</span></label>
+                                <input type="url" class="form-control" id="content_url" name="content_url" 
+                                       placeholder="https://playbharat.com/..." required>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle me-1"></i>Copy and paste the URL of the content you're reporting
+                                </div>
+                            </div>
+
+                            <!-- Violation Category -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Reason for reporting <span class="text-danger">*</span></label>
+                                <select class="form-select" name="violation_category" required>
+                                    <option value="">Select a reason...</option>
+                                    <option value="hate_speech">🚫 Hate Speech or Discrimination</option>
+                                    <option value="harassment">😡 Harassment or Bullying</option>
+                                    <option value="violence">⚔️ Violence or Harmful Content</option>
+                                    <option value="adult_content">🔞 Adult or Sexual Content</option>
+                                    <option value="spam">📧 Spam or Misleading Content</option>
+                                    <option value="copyright">©️ Copyright Infringement</option>
+                                    <option value="privacy">🔒 Privacy Violation</option>
+                                    <option value="dangerous">⚠️ Dangerous or Illegal Activities</option>
+                                    <option value="misinformation">📰 False Information or Fake News</option>
+                                    <option value="impersonation">👤 Impersonation</option>
+                                    <option value="other">🔍 Other</option>
+                                </select>
+                            </div>
+
+                            <!-- Detailed Description -->
+                            <div class="mb-4">
+                                <label for="description" class="form-label fw-bold">Detailed Description <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="description" name="description" rows="5" 
+                                          placeholder="Please provide specific details about why you're reporting this content. Include timestamps for videos if relevant." required></textarea>
+                                <div class="form-text">
+                                    <i class="bi bi-lightbulb me-1"></i>The more details you provide, the faster we can review and take appropriate action
+                                </div>
+                            </div>
+
+                            <!-- Timestamp for Videos -->
+                            <div class="mb-4" id="timestamp-section" style="display: none;">
+                                <label for="timestamp" class="form-label fw-bold">Timestamp (for videos)</label>
+                                <input type="text" class="form-control" id="timestamp" name="timestamp" 
+                                       placeholder="e.g., 2:45 or 2:45-3:30">
+                                <div class="form-text">
+                                    <i class="bi bi-clock me-1"></i>If the violation occurs at a specific time in the video, please specify
+                                </div>
+                            </div>
+
+                            <!-- Additional Information -->
+                            <div class="mb-4">
+                                <label for="additional_info" class="form-label fw-bold">Additional Information</label>
+                                <textarea class="form-control" id="additional_info" name="additional_info" rows="3" 
+                                          placeholder="Any other relevant information that might help our review team..."></textarea>
+                            </div>
+
+                            <!-- Reporter Contact -->
+                            <div class="mb-4">
+                                <label for="reporter_email" class="form-label fw-bold">Your Email (Optional)</label>
+                                <input type="email" class="form-control" id="reporter_email" name="reporter_email" 
+                                       placeholder="your.email@example.com">
+                                <div class="form-text">
+                                    <i class="bi bi-shield-check me-1"></i>Provide your email if you'd like updates on this report. Your identity will be kept confidential.
+                                </div>
+                            </div>
+
+                            <!-- Urgency Level -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Urgency Level</label>
+                                <div class="urgency-levels">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="urgency" id="urgency_low" value="low" checked>
+                                        <label class="form-check-label" for="urgency_low">
+                                            <span class="badge bg-success me-2">Low</span> Minor policy violation
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="urgency" id="urgency_medium" value="medium">
+                                        <label class="form-check-label" for="urgency_medium">
+                                            <span class="badge bg-warning me-2">Medium</span> Concerning content that needs review
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="urgency" id="urgency_high" value="high">
+                                        <label class="form-check-label" for="urgency_high">
+                                            <span class="badge bg-danger me-2">High</span> Immediate threat or severe violation
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Terms Agreement -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="terms_agreement" name="terms_agreement" required>
+                                    <label class="form-check-label" for="terms_agreement">
+                                        I confirm that this report is made in good faith and that the information provided is accurate to the best of my knowledge. I understand that false reports may result in penalties to my account.
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-warning btn-lg px-5">
+                                    <i class="bi bi-flag-fill me-2"></i>Submit Report
+                                </button>
+                                <div class="mt-3">
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock me-1"></i>Reports are typically reviewed within 24 hours
+                                    </small>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Happens Next -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="text-center mb-5">What Happens After You Report</h2>
+                    
+                    <div class="process-steps">
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="process-step text-center">
+                                    <div class="step-icon bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                        <i class="bi bi-flag-fill display-6"></i>
+                                    </div>
+                                    <h5 class="fw-bold">Report Submitted</h5>
+                                    <p class="text-muted small">Your report is immediately logged in our moderation system</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="process-step text-center">
+                                    <div class="step-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                        <i class="bi bi-search display-6"></i>
+                                    </div>
+                                    <h5 class="fw-bold">Review Process</h5>
+                                    <p class="text-muted small">Our moderation team reviews the content against our guidelines</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="process-step text-center">
+                                    <div class="step-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                        <i class="bi bi-check-circle-fill display-6"></i>
+                                    </div>
+                                    <h5 class="fw-bold">Action Taken</h5>
+                                    <p class="text-muted small">Appropriate action is taken if violations are found</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="process-step text-center">
+                                    <div class="step-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+                                        <i class="bi bi-envelope-check display-6"></i>
+                                    </div>
+                                    <h5 class="fw-bold">Follow-up</h5>
+                                    <p class="text-muted small">You receive an update if you provided your email address</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Contacts -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="emergency-section bg-danger bg-opacity-10 border border-danger rounded p-4">
+                        <h3 class="text-danger mb-3">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>Emergency Situations
+                        </h3>
+                        <p class="mb-3">If you encounter content that poses an immediate threat to someone's safety, please also contact:</p>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="emergency-contact text-center">
+                                    <i class="bi bi-telephone-fill text-danger display-6 mb-2"></i>
+                                    <h6 class="fw-bold">Police Emergency</h6>
+                                    <p class="mb-0">📞 <strong>100</strong></p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="emergency-contact text-center">
+                                    <i class="bi bi-chat-heart-fill text-danger display-6 mb-2"></i>
+                                    <h6 class="fw-bold">Mental Health</h6>
+                                    <p class="mb-0">📞 <strong>9152987821</strong></p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="emergency-contact text-center">
+                                    <i class="bi bi-shield-fill-exclamation text-danger display-6 mb-2"></i>
+                                    <h6 class="fw-bold">Cyber Crime</h6>
+                                    <p class="mb-0">🌐 <strong>cybercrime.gov.in</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Resources -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h3 class="mb-4">Additional Resources</h3>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="resource-card p-4 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-book text-primary display-6 mb-3"></i>
+                                <h6 class="fw-bold">Community Guidelines</h6>
+                                <p class="text-muted small mb-3">Read our full community guidelines</p>
+                                <a href="{% url 'community_guidelines' %}" class="btn btn-outline-primary btn-sm">Read Guidelines</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="resource-card p-4 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-question-circle text-success display-6 mb-3"></i>
+                                <h6 class="fw-bold">Help Center</h6>
+                                <p class="text-muted small mb-3">Get help with using PlayBharat</p>
+                                <a href="{% url 'help' %}" class="btn btn-outline-success btn-sm">Get Help</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="resource-card p-4 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-envelope text-info display-6 mb-3"></i>
+                                <h6 class="fw-bold">Contact Support</h6>
+                                <p class="text-muted small mb-3">Reach out to our support team</p>
+                                <a href="{% url 'contact' %}" class="btn btn-outline-info btn-sm">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .report-page .report-form-container {
+        border: 1px solid #e5e7eb;
+    }
+    
+    .report-page .process-step .step-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .report-page .emergency-contact {
+        padding: 1rem;
+    }
+    
+    .report-page .resource-card {
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .report-page .resource-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .report-page .form-check-input:checked {
+        background-color: #f59e0b;
+        border-color: #f59e0b;
+    }
+    
+    .report-page .btn-warning {
+        background-color: #f59e0b;
+        border-color: #f59e0b;
+        color: white;
+    }
+    
+    .report-page .btn-warning:hover {
+        background-color: #d97706;
+        border-color: #d97706;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Show timestamp section for video reports
+    const reportTypeRadios = document.querySelectorAll('input[name="report_type"]');
+    const timestampSection = document.getElementById('timestamp-section');
+    
+    reportTypeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'video') {
+                timestampSection.style.display = 'block';
+            } else {
+                timestampSection.style.display = 'none';
+            }
+        });
+    });
+    
+    // Form submission
+    document.querySelector('.report-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Show success message
+        const container = document.querySelector('.report-form-container');
+        container.innerHTML = `
+            <div class="text-center py-5">
+                <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                <h3 class="text-success mt-3 mb-4">Report Submitted Successfully</h3>
+                <p class="lead mb-4">Thank you for helping keep PlayBharat safe. Your report has been received and will be reviewed by our moderation team within 24 hours.</p>
+                <p class="text-muted">Report ID: <strong>PB-${Date.now()}</strong></p>
+                <div class="mt-4">
+                    <a href="/" class="btn btn-primary me-3">Return to Home</a>
+                    <a href="{% url 'help' %}" class="btn btn-outline-secondary">Help Center</a>
+                </div>
+            </div>
+        `;
+    });
+});
+</script>
+{% endblock %}

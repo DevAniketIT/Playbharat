@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Video - {{ object.title }} - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="d-flex align-items-center mb-4">
+                <a href="{% url 'videos:manage' %}" class="btn btn-outline-secondary me-3">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div>
+                    <h2>Edit Video</h2>
+                    <p class="text-muted mb-0">Update your video details</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <!-- Video Preview -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Video Preview</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Thumbnail -->
+                            <div class="position-relative mb-3">
+                                {% if object.thumbnail %}
+                                    <img src="{{ object.thumbnail.url }}" alt="{{ object.title }}" 
+                                         class="img-fluid rounded" id="current-thumbnail">
+                                {% else %}
+                                    <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                         style="height: 200px;" id="thumbnail-placeholder">
+                                        <i class="bi bi-play-circle display-4 text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if object.duration %}
+                                    <span class="badge bg-dark position-absolute bottom-0 end-0 m-2">
+                                        {{ object.duration }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Video Stats -->
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <strong class="d-block">{{ object.view_count|default:0 }}</strong>
+                                    <small class="text-muted">Views</small>
+                                </div>
+                                <div class="col-4">
+                                    <strong class="d-block">{{ object.like_count|default:0 }}</strong>
+                                    <small class="text-muted">Likes</small>
+                                </div>
+                                <div class="col-4">
+                                    <strong class="d-block">{{ object.comment_count|default:0 }}</strong>
+                                    <small class="text-muted">Comments</small>
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            
+                            <!-- Quick Info -->
+                            <div class="mb-2">
+                                <strong>Status:</strong>
+                                <span class="badge bg-{{ object.visibility|yesno:'success,warning,secondary' }} ms-1">
+                                    {{ object.get_visibility_display }}
+                                </span>
+                            </div>
+                            
+                            <div class="mb-2">
+                                <strong>Uploaded:</strong>
+                                <span class="text-muted">{{ object.uploaded_at|date:"M j, Y" }}</span>
+                            </div>
+                            
+                            {% if object.category %}
+                                <div class="mb-2">
+                                    <strong>Category:</strong>
+                                    <span class="text-muted">{{ object.get_category_display }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Edit Form -->
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Video Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" enctype="multipart/form-data" id="edit-video-form">
+                                {% csrf_token %}
+                                
+                                <!-- Title -->
+                                <div class="mb-3">
+                                    <label for="{{ form.title.id_for_label }}" class="form-label">
+                                        Video Title *
+                                    </label>
+                                    {{ form.title }}
+                                    <div class="form-text">
+                                        <span id="title-count">{{ form.title.value|length|default:0 }}</span>/100 characters
+                                    </div>
+                                    {% if form.title.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.title.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Description -->
+                                <div class="mb-3">
+                                    <label for="{{ form.description.id_for_label }}" class="form-label">
+                                        Description
+                                    </label>
+                                    {{ form.description }}
+                                    <div class="form-text">
+                                        <span id="description-count">{{ form.description.value|length|default:0 }}</span>/1000 characters
+                                    </div>
+                                    {% if form.description.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.description.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="row">
+                                    <!-- Category -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ form.category.id_for_label }}" class="form-label">
+                                            Category *
+                                        </label>
+                                        {{ form.category }}
+                                        {% if form.category.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.category.errors.0 }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Visibility -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ form.visibility.id_for_label }}" class="form-label">
+                                            Visibility
+                                        </label>
+                                        {{ form.visibility }}
+                                        {% if form.visibility.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.visibility.errors.0 }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Tags -->
+                                <div class="mb-3">
+                                    <label for="{{ form.tags.id_for_label }}" class="form-label">
+                                        Tags
+                                    </label>
+                                    {{ form.tags }}
+                                    <div class="form-text">Separate tags with commas</div>
+                                    {% if form.tags.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.tags.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Thumbnail -->
+                                <div class="mb-3">
+                                    <label for="{{ form.thumbnail.id_for_label }}" class="form-label">
+                                        Custom Thumbnail
+                                    </label>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            {{ form.thumbnail }}
+                                            <div class="form-text">Upload a new thumbnail to replace the current one</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div id="thumbnail-preview" class="border rounded p-2 text-center" style="min-height: 60px;">
+                                                <small class="text-muted">New thumbnail preview</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if form.thumbnail.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.thumbnail.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Settings -->
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Content Settings</label>
+                                        <div class="form-check">
+                                            {{ form.age_restriction }}
+                                            <label class="form-check-label" for="{{ form.age_restriction.id_for_label }}">
+                                                Age Restricted (18+)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Interaction Settings</label>
+                                        <div class="form-check">
+                                            {{ form.allow_comments }}
+                                            <label class="form-check-label" for="{{ form.allow_comments.id_for_label }}">
+                                                Allow comments
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            {{ form.allow_likes }}
+                                            <label class="form-check-label" for="{{ form.allow_likes.id_for_label }}">
+                                                Allow likes and dislikes
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="d-flex justify-content-between pt-3 border-top">
+                                    <div>
+                                        <a href="{% url 'videos:manage' %}" class="btn btn-outline-secondary">
+                                            <i class="bi bi-arrow-left me-2"></i>Back to Videos
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-primary me-2" onclick="previewChanges()">
+                                            <i class="bi bi-eye me-2"></i>Preview
+                                        </button>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="bi bi-check-circle me-2"></i>Save Changes
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const titleInput = document.getElementById('{{ form.title.id_for_label }}');
+    const descriptionInput = document.getElementById('{{ form.description.id_for_label }}');
+    const thumbnailInput = document.getElementById('{{ form.thumbnail.id_for_label }}');
+    
+    // Character counters
+    titleInput.addEventListener('input', function() {
+        document.getElementById('title-count').textContent = this.value.length;
+    });
+    
+    descriptionInput.addEventListener('input', function() {
+        document.getElementById('description-count').textContent = this.value.length;
+    });
+    
+    // Thumbnail preview
+    thumbnailInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('thumbnail-preview').innerHTML = 
+                    `<img src="${e.target.result}" alt="New thumbnail" class="img-fluid rounded" style="max-height: 60px;">`;
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+    
+    // Add Bootstrap classes to form fields
+    titleInput.classList.add('form-control');
+    descriptionInput.classList.add('form-control');
+    thumbnailInput.classList.add('form-control');
+    
+    // Add classes to select fields
+    const selectFields = document.querySelectorAll('#edit-video-form select');
+    selectFields.forEach(field => {
+        field.classList.add('form-select');
+    });
+    
+    // Add classes to checkboxes
+    const checkboxes = document.querySelectorAll('#edit-video-form input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.classList.add('form-check-input');
+    });
+});
+
+function previewChanges() {
+    const title = document.getElementById('{{ form.title.id_for_label }}').value;
+    const description = document.getElementById('{{ form.description.id_for_label }}').value;
+    
+    // Simple preview modal
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.innerHTML = `
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Video Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>${title || 'Untitled Video'}</h6>
+                    <p class="text-muted">${description || 'No description provided'}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    const bsModal = new bootstrap.Modal(modal);
+    bsModal.show();
+    
+    modal.addEventListener('hidden.bs.modal', function() {
+        document.body.removeChild(modal);
+    });
+}
+</script>
+{% endblock %}

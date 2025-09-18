@@ -1,0 +1,440 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PlayBharat - India's Video Platform{% endblock %}
+
+{% block content %}
+<!-- Compact Hero Section -->
+<section class="hero-section bg-gradient-primary text-white py-3">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="display-5 fw-bold mb-2">
+                        Welcome to <span class="text-gradient">PlayBharat</span>
+                    </h1>
+                    <p class="lead mb-2" style="font-size: 1rem;">
+                        🇮🇳 India's premier video platform celebrating our diverse culture and creativity.
+                    </p>
+                    <div class="hero-stats mb-2">
+                        <div class="row text-center g-2">
+                            <div class="col-4">
+                                <div class="stat-box">
+                                    <h6 class="fw-bold mb-0">{{ videos|length }}+</h6>
+                                    <small class="opacity-75">Videos</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-box">
+                                    <h6 class="fw-bold mb-0">10+</h6>
+                                    <small class="opacity-75">Languages</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-box">
+                                    <h6 class="fw-bold mb-0">1000+</h6>
+                                    <small class="opacity-75">Creators</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% if not user.is_authenticated %}
+                            <a href="{% url 'accounts:register' %}" class="btn btn-light btn-sm">
+                                <i class="bi bi-person-plus me-1"></i>Join PlayBharat
+                            </a>
+                        {% endif %}
+                        <a href="#videos" class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-compass me-1"></i>Explore Content
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                {% if trending_videos %}
+                    <div class="hero-video-showcase">
+                        <div class="showcase-header mb-2">
+                            <h6 class="text-white mb-0">
+                                <i class="bi bi-fire text-warning me-1"></i>Trending Now
+                            </h6>
+                        </div>
+                        
+                        {% for video in trending_videos|slice:":3" %}
+                            <a href="{{ video.get_absolute_url }}" class="text-decoration-none">
+                                <div class="featured-video-card mb-2">
+                                    <div class="card border-0 bg-dark bg-opacity-75 text-white">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-4">
+                                                <div class="video-thumbnail bg-primary rounded d-flex align-items-center justify-content-center" style="height: 60px;">
+                                                    {% if video.thumbnail %}
+                                                        <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="img-fluid rounded w-100 h-100" style="object-fit: cover;">
+                                                    {% else %}
+                                                        <i class="bi bi-play-fill text-white"></i>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-8 ps-2">
+                                                <h6 class="card-title mb-1 small text-white">{{ video.title|truncatechars:40 }}</h6>
+                                                <small class="text-white-50">
+                                                    <i class="bi bi-eye me-1"></i>{{ video.view_count|floatformat:0 }} views
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Compact Categories -->
+<section class="categories-section py-2 bg-light">
+    <div class="container">
+        <div class="text-center mb-2">
+            <h4 class="fw-bold mb-1">
+                <i class="bi bi-grid-3x3-gap text-primary me-1"></i>Categories
+            </h4>
+        </div>
+        <div class="row g-2">
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-2 bg-white rounded shadow-sm">
+                    <i class="bi bi-music-note-beamed fs-4 text-primary mb-1"></i>
+                    <small class="fw-semibold d-block">Music</small>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-2 bg-white rounded shadow-sm">
+                    <i class="bi bi-film fs-4 text-success mb-1"></i>
+                    <small class="fw-semibold d-block">Movies</small>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-2 bg-white rounded shadow-sm">
+                    <i class="bi bi-trophy fs-4 text-warning mb-1"></i>
+                    <small class="fw-semibold d-block">Sports</small>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-2 bg-white rounded shadow-sm">
+                    <i class="bi bi-book fs-4 text-info mb-1"></i>
+                    <small class="fw-semibold d-block">Education</small>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-2 bg-white rounded shadow-sm">
+                    <i class="bi bi-newspaper fs-4 text-danger mb-1"></i>
+                    <small class="fw-semibold d-block">News</small>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2">
+                <div class="category-card text-center p-2 bg-white rounded shadow-sm">
+                    <i class="bi bi-heart fs-4 mb-1" style="color: #ec4899;"></i>
+                    <small class="fw-semibold d-block">Lifestyle</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Compact Videos Section -->
+<section id="videos" class="videos-section py-2">
+    <div class="container">
+        <div class="row align-items-center mb-2">
+            <div class="col">
+                <h4 class="fw-bold mb-1">
+                    <i class="bi bi-play-circle text-primary me-1"></i>Latest Videos
+                </h4>
+            </div>
+            <div class="col-auto">
+                <a href="{% url 'videos:list' %}" class="btn btn-outline-primary btn-sm">
+                    View All <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        {% if videos %}
+            <div class="row g-2">
+                {% for video in videos %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ video.get_absolute_url }}" class="text-decoration-none">
+                            <div class="video-card border-0 rounded overflow-hidden shadow-sm">
+                                <div class="card border-0">
+                                    <div class="video-thumbnail bg-primary d-flex align-items-center justify-content-center" style="height: 160px;">
+                                        {% if video.thumbnail %}
+                                            <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                        {% else %}
+                                            <div class="text-center text-white">
+                                                <i class="bi bi-play-circle" style="font-size: 3rem;"></i>
+                                                <div class="mt-1">
+                                                    <small>{{ video.get_category_display }}</small>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="video-info p-2 bg-white">
+                                        <h6 class="video-title mb-1 lh-sm">
+                                            <span class="text-dark fw-medium">{{ video.title|truncatechars:50 }}</span>
+                                        </h6>
+                                        <div class="channel-info mb-1">
+                                            <small class="text-muted fw-medium">
+                                                <i class="bi bi-person-circle me-1"></i>{{ video.channel.name }}
+                                            </small>
+                                        </div>
+                                        <div class="video-stats mb-1">
+                                            <small class="text-muted">
+                                                <i class="bi bi-eye me-1"></i>{{ video.view_count|floatformat:0 }} views
+                                                <span class="mx-1">•</span>
+                                                {{ video.uploaded_at|timesince }} ago
+                                            </small>
+                                        </div>
+                                        <div class="video-category">
+                                            <span class="badge bg-primary badge-sm">{{ video.get_category_display }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-videos text-center py-3">
+                <div class="mb-2">
+                    <i class="bi bi-camera-video display-6 text-primary"></i>
+                </div>
+                <h5 class="text-primary mb-1">Content Coming Soon!</h5>
+                <p class="text-muted mb-2">Creators are preparing amazing videos for you.</p>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-person-plus me-1"></i>Join PlayBharat
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Compact CTA -->
+<section class="creator-cta py-2 bg-gradient-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h5 class="mb-1">Ready to Share Your Story?</h5>
+                <p class="mb-0 small">Join thousands of Indian creators sharing their passion.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                {% if user.is_authenticated %}
+                    {% if user.has_channel %}
+                        <a href="#" class="btn btn-light btn-sm">
+                            <i class="bi bi-upload me-1"></i>Upload Video
+                        </a>
+                    {% else %}
+                        <a href="{% url 'accounts:create_channel' %}" class="btn btn-light btn-sm">
+                            <i class="bi bi-plus-circle me-1"></i>Create Channel
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'accounts:register' %}" class="btn btn-light btn-sm">
+                        <i class="bi bi-person-plus me-1"></i>Get Started
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-blue: #1e3a8a;
+        --accent-orange: #ff9933;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        line-height: 1.5;
+    }
+
+    /* Compact Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+        min-height: 300px;
+    }
+
+    .text-gradient {
+        background: linear-gradient(45deg, var(--accent-orange), #f59e0b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 900;
+    }
+
+    .hero-stats {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+        border-radius: 12px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-box h6 {
+        font-size: 1.2rem;
+        color: white;
+    }
+
+    /* Compact Categories */
+    .category-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+        height: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .category-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Compact Video Cards */
+    .video-card {
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .video-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    .video-thumbnail {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        border-radius: 8px 8px 0 0;
+    }
+
+    .video-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .video-title {
+        font-size: 0.95rem;
+        line-height: 1.3;
+    }
+
+    .badge-sm {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    /* Compact Hero Showcase */
+    .hero-video-showcase {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        border-radius: 12px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .featured-video-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .featured-video-card:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.02);
+    }
+
+    /* CTA Section */
+    .creator-cta {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+    }
+
+    /* Buttons */
+    .btn-light:hover {
+        background: var(--accent-orange);
+        border-color: var(--accent-orange);
+        color: white;
+    }
+
+    .btn-outline-light:hover {
+        background: white;
+        color: var(--primary-blue);
+    }
+
+    .btn-primary {
+        background: #3b82f6;
+        border-color: #3b82f6;
+    }
+
+    .btn-primary:hover {
+        background: var(--accent-orange);
+        border-color: var(--accent-orange);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .hero-section {
+            min-height: 250px;
+        }
+        
+        .display-5 {
+            font-size: 1.8rem;
+        }
+        
+        .categories-section, .videos-section {
+            padding: 1.5rem 0;
+        }
+        
+        .category-card {
+            height: 70px;
+        }
+        
+        .video-thumbnail {
+            height: 140px !important;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-section {
+            min-height: 220px;
+        }
+        
+        .display-5 {
+            font-size: 1.6rem;
+        }
+        
+        .hero-stats {
+            padding: 0.8rem;
+        }
+        
+        .stat-box h6 {
+            font-size: 1rem;
+        }
+        
+        .category-card {
+            height: 60px;
+        }
+        
+        .category-card i {
+            font-size: 1.2rem !important;
+        }
+        
+        .video-thumbnail {
+            height: 120px !important;
+        }
+    }
+</style>
+{% endblock %}

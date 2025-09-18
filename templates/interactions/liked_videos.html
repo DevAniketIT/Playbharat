@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Liked Videos - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="bi bi-heart me-2 text-danger"></i>Liked Videos
+            </h2>
+            
+            {% if liked_videos %}
+                <div class="row">
+                    {% for like in liked_videos %}
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <a href="{{ like.video.get_absolute_url }}" class="text-decoration-none">
+                                <div class="card h-100 video-card">
+                                    <div class="video-thumbnail-wrapper position-relative">
+                                        {% if like.video.thumbnail %}
+                                            <img src="{{ like.video.thumbnail.url }}" alt="{{ like.video.title }}" 
+                                                 class="card-img-top" style="height: 180px; object-fit: cover;">
+                                        {% else %}
+                                            <div class="video-thumbnail video-thumbnail-gradient-1 d-flex align-items-center justify-content-center" 
+                                                 style="height: 180px;">
+                                                <i class="bi bi-play-circle text-white" style="font-size: 3rem;"></i>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <div class="duration-badge position-absolute bottom-0 end-0 bg-dark text-white px-2 py-1 m-2 rounded">
+                                            {{ like.video.duration_formatted }}
+                                        </div>
+                                        
+                                        <div class="liked-badge position-absolute top-0 start-0 bg-danger text-white px-2 py-1 m-2 rounded">
+                                            <i class="bi bi-heart-fill"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ like.video.title|truncatechars:60 }}</h6>
+                                        <p class="card-text small text-muted">
+                                            <i class="bi bi-person-circle me-1"></i>{{ like.video.channel.name }}
+                                        </p>
+                                        <p class="card-text small text-muted">
+                                            <i class="bi bi-eye me-1"></i>{{ like.video.view_count|floatformat:0 }} views
+                                            <span class="mx-1">•</span>
+                                            <i class="bi bi-clock me-1"></i>{{ like.video.uploaded_at|timesince }} ago
+                                        </p>
+                                        <small class="text-muted">
+                                            <i class="bi bi-heart text-danger me-1"></i>Liked {{ like.created_at|timesince }} ago
+                                        </small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if is_paginated %}
+                    <nav aria-label="Liked videos pagination" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1">First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+                            
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                                </span>
+                            </li>
+                            
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-heart display-1 text-muted mb-4"></i>
+                    <h4 class="text-muted mb-3">No Liked Videos Yet</h4>
+                    <p class="text-muted mb-4">
+                        Videos you like will appear here. Start exploring and liking amazing content!
+                    </p>
+                    <a href="{% url 'videos:trending' %}" class="btn btn-primary">
+                        <i class="bi bi-search me-2"></i>Discover Videos
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.video-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.video-thumbnail-gradient-1 { 
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+}
+
+.liked-badge {
+    font-size: 0.8rem;
+    border-radius: 12px;
+}
+
+.duration-badge {
+    font-size: 0.8rem;
+    border-radius: 4px;
+}
+</style>
+{% endblock %}

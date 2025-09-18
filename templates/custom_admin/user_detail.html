@@ -1,0 +1,297 @@
+{% extends 'custom_admin/admin_base.html' %}
+
+{% block page_title %}User Details{% endblock %}
+{% block page_subtitle %}{{ profile_user.get_full_name|default:profile_user.username }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- User Info -->
+    <div class="col-lg-4">
+        <div class="card stats-card">
+            <div class="card-body text-center">
+                {% if profile_user.profile_picture %}
+                    <img src="{{ profile_user.profile_picture.url }}" class="rounded-circle mb-3" width="100" height="100">
+                {% else %}
+                    <div class="bg-secondary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                        <i class="bi bi-person text-white" style="font-size: 2rem;"></i>
+                    </div>
+                {% endif %}
+                
+                <h4>{{ profile_user.get_full_name|default:profile_user.username }}</h4>
+                <p class="text-muted">@{{ profile_user.username }}</p>
+                
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                    {% if profile_user.is_superuser %}
+                        <span class="badge bg-danger">Superuser</span>
+                    {% elif profile_user.is_staff %}
+                        <span class="badge bg-warning">Staff</span>
+                    {% elif profile_user.is_verified_creator %}
+                        <span class="badge bg-info">Verified Creator</span>
+                    {% elif profile_user.is_creator %}
+                        <span class="badge bg-secondary">Creator</span>
+                    {% else %}
+                        <span class="badge bg-light text-dark">User</span>
+                    {% endif %}
+                    
+                    {% if profile_user.is_active %}
+                        <span class="badge bg-success">Active</span>
+                    {% else %}
+                        <span class="badge bg-danger">Inactive</span>
+                    {% endif %}
+                </div>
+                
+                {% if profile_user.bio %}
+                    <p class="text-muted small">{{ profile_user.bio }}</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="card stats-card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Quick Actions</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" name="action" value="toggle_active" 
+                                class="btn {% if profile_user.is_active %}btn-outline-danger{% else %}btn-outline-success{% endif %}">
+                            {% if profile_user.is_active %}
+                                <i class="bi bi-x-circle me-2"></i>Deactivate User
+                            {% else %}
+                                <i class="bi bi-check-circle me-2"></i>Activate User
+                            {% endif %}
+                        </button>
+                        
+                        {% if not profile_user.is_superuser %}
+                        <button type="submit" name="action" value="toggle_staff" 
+                                class="btn {% if profile_user.is_staff %}btn-outline-warning{% else %}btn-outline-info{% endif %}">
+                            {% if profile_user.is_staff %}
+                                <i class="bi bi-dash-circle me-2"></i>Remove Staff
+                            {% else %}
+                                <i class="bi bi-plus-circle me-2"></i>Make Staff
+                            {% endif %}
+                        </button>
+                        {% endif %}
+                        
+                        {% if profile_user.is_creator %}
+                        <button type="submit" name="action" value="toggle_verified" 
+                                class="btn {% if profile_user.is_verified_creator %}btn-outline-secondary{% else %}btn-outline-primary{% endif %}">
+                            {% if profile_user.is_verified_creator %}
+                                <i class="bi bi-shield-x me-2"></i>Remove Verification
+                            {% else %}
+                                <i class="bi bi-shield-check me-2"></i>Verify Creator
+                            {% endif %}
+                        </button>
+                        {% endif %}
+                    </div>
+                </form>
+                
+                <hr>
+                
+                <div class="d-grid gap-2">
+                    <a href="{% url 'accounts:profile' %}?user={{ profile_user.username }}" target="_blank" class="btn btn-outline-primary">
+                        <i class="bi bi-eye me-2"></i>View Public Profile
+                    </a>
+                    <a href="{% url 'custom_admin:user_management' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Users
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- User Details and Stats -->
+    <div class="col-lg-8">
+        <!-- Personal Information -->
+        <div class="card stats-card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">Personal Information</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-borderless table-sm">
+                            <tr>
+                                <th width="40%">Username:</th>
+                                <td>{{ profile_user.username }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>
+                                    {{ profile_user.email }}
+                                    {% if profile_user.email_verified %}
+                                        <i class="bi bi-check-circle-fill text-success" title="Verified"></i>
+                                    {% else %}
+                                        <i class="bi bi-exclamation-circle-fill text-warning" title="Not Verified"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Phone:</th>
+                                <td>
+                                    {{ profile_user.phone_number|default:"Not provided" }}
+                                    {% if profile_user.phone_verified %}
+                                        <i class="bi bi-check-circle-fill text-success" title="Verified"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Date Joined:</th>
+                                <td>{{ profile_user.date_joined|date:"M d, Y H:i" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Last Login:</th>
+                                <td>{{ profile_user.last_login|date:"M d, Y H:i"|default:"Never" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-borderless table-sm">
+                            <tr>
+                                <th width="40%">First Name:</th>
+                                <td>{{ profile_user.first_name|default:"Not provided" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Last Name:</th>
+                                <td>{{ profile_user.last_name|default:"Not provided" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Date of Birth:</th>
+                                <td>{{ profile_user.date_of_birth|date:"M d, Y"|default:"Not provided" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Country:</th>
+                                <td>{{ profile_user.country }}</td>
+                            </tr>
+                            <tr>
+                                <th>Language:</th>
+                                <td>{{ profile_user.get_preferred_language_display }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card text-center">
+                    <div class="card-body">
+                        <h3 class="text-primary">{{ channel_videos }}</h3>
+                        <p class="text-muted mb-0">Videos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card text-center">
+                    <div class="card-body">
+                        <h3 class="text-success">{{ channel_subscribers }}</h3>
+                        <p class="text-muted mb-0">Subscribers</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card text-center">
+                    <div class="card-body">
+                        <h3 class="text-info">{{ total_views }}</h3>
+                        <p class="text-muted mb-0">Total Views</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card text-center">
+                    <div class="card-body">
+                        <h3 class="text-warning">
+                            {% if profile_user.is_creator %}1{% else %}0{% endif %}
+                        </h3>
+                        <p class="text-muted mb-0">Channels</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Channel Information -->
+        {% if channel %}
+        <div class="card stats-card">
+            <div class="card-header">
+                <h6 class="mb-0">Channel Information</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    {% if channel.avatar %}
+                        <img src="{{ channel.avatar.url }}" class="rounded-circle me-3" width="60" height="60">
+                    {% else %}
+                        <div class="bg-info rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="bi bi-tv text-white"></i>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h5 class="mb-1">{{ channel.name }}</h5>
+                        <p class="text-muted mb-0">{{ channel.handle }}</p>
+                        <small class="text-muted">{{ channel.get_category_display }} • Created {{ channel.created_at|date:"M d, Y" }}</small>
+                    </div>
+                </div>
+                
+                {% if channel.description %}
+                    <p class="mb-3">{{ channel.description }}</p>
+                {% endif %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Channel Stats</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Subscribers:</strong> {{ channel.subscriber_count|floatformat:0 }}</li>
+                            <li><strong>Total Views:</strong> {{ channel.total_views|floatformat:0 }}</li>
+                            <li><strong>Videos:</strong> {{ channel.total_videos }}</li>
+                            <li><strong>Status:</strong> 
+                                {% if channel.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Settings</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Monetized:</strong> 
+                                {% if channel.is_monetized %}
+                                    <span class="text-success">Yes</span>
+                                {% else %}
+                                    <span class="text-muted">No</span>
+                                {% endif %}
+                            </li>
+                            <li><strong>Comments:</strong> 
+                                {% if channel.allow_comments %}
+                                    <span class="text-success">Allowed</span>
+                                {% else %}
+                                    <span class="text-muted">Disabled</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                        
+                        <div class="mt-3">
+                            <a href="{% url 'custom_admin:channel_detail' channel.id %}" class="btn btn-sm btn-outline-primary">
+                                View Channel Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="card stats-card">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-tv fs-1 text-muted mb-3"></i>
+                <h6>No Channel</h6>
+                <p class="text-muted">This user hasn't created a channel yet.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

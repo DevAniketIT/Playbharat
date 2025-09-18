@@ -1,0 +1,298 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Help Center - PlayBharat{% endblock %}
+{% block description %}Get help with PlayBharat - India's premier video platform. Find answers to common questions, learn how to use features, and get support.{% endblock %}
+
+{% block content %}
+<div class="help-page">
+    <!-- Hero Section -->
+    <section class="hero-section bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">Help Center</h1>
+                    <p class="lead mb-4">Find answers to common questions and get the help you need to make the most of PlayBharat</p>
+                    
+                    <!-- Quick Search -->
+                    <div class="search-box mb-4">
+                        <div class="input-group input-group-lg">
+                            <input type="text" class="form-control" placeholder="Search for help articles..." id="help-search">
+                            <button class="btn btn-light" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="bi bi-question-circle display-1 text-white opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="quick-action-card text-center p-4 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-upload text-primary display-6 mb-3"></i>
+                        <h5 class="fw-bold mb-2">Upload Videos</h5>
+                        <p class="text-muted small">Learn how to upload and manage your videos</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="quick-action-card text-center p-4 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-person-gear text-success display-6 mb-3"></i>
+                        <h5 class="fw-bold mb-2">Account Settings</h5>
+                        <p class="text-muted small">Manage your profile and preferences</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="quick-action-card text-center p-4 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-shield-check text-warning display-6 mb-3"></i>
+                        <h5 class="fw-bold mb-2">Privacy & Safety</h5>
+                        <p class="text-muted small">Learn about privacy controls and safety features</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="quick-action-card text-center p-4 bg-white rounded shadow-sm h-100">
+                        <i class="bi bi-headset text-info display-6 mb-3"></i>
+                        <h5 class="fw-bold mb-2">Contact Support</h5>
+                        <p class="text-muted small">Get in touch with our support team</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+                    
+                    <div class="accordion" id="faqAccordion">
+                        <!-- Getting Started -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    How do I create an account on PlayBharat?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    <p>Creating an account is simple:</p>
+                                    <ol>
+                                        <li>Click "Sign Up" in the top navigation</li>
+                                        <li>Enter your email, username, and password</li>
+                                        <li>Verify your email address</li>
+                                        <li>Complete your profile with your location and language preferences</li>
+                                    </ol>
+                                    <p>Once registered, you can start watching, liking, and commenting on videos immediately!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Video Upload -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    How do I upload videos to PlayBharat?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    <p>To upload videos:</p>
+                                    <ol>
+                                        <li>Create a channel first from your profile settings</li>
+                                        <li>Click "Upload" in the top navigation</li>
+                                        <li>Select your video file (MP4, MOV, AVI formats supported)</li>
+                                        <li>Add title, description, and select category</li>
+                                        <li>Choose thumbnail and privacy settings</li>
+                                        <li>Click "Publish" to make your video live</li>
+                                    </ol>
+                                    <p><strong>Video Requirements:</strong> Max 500MB, up to 10 minutes duration for new creators.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Channel Creation -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    How do I create a channel?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    <p>Creating a channel allows you to upload content:</p>
+                                    <ol>
+                                        <li>Go to your profile page</li>
+                                        <li>Click "Create Channel" button</li>
+                                        <li>Enter channel name and description</li>
+                                        <li>Choose your content category and target audience</li>
+                                        <li>Upload channel banner and profile picture</li>
+                                        <li>Review and create your channel</li>
+                                    </ol>
+                                    <p>Your channel will be reviewed within 24 hours and activated once approved.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Language Support -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                    What languages are supported on PlayBharat?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    <p>PlayBharat supports <strong>13 Indian languages</strong>:</p>
+                                    <ul class="row">
+                                        <li class="col-6">English</li>
+                                        <li class="col-6">Hindi (हिन्दी)</li>
+                                        <li class="col-6">Tamil (தமிழ்)</li>
+                                        <li class="col-6">Telugu (తెలుగు)</li>
+                                        <li class="col-6">Bengali (বাংলা)</li>
+                                        <li class="col-6">Marathi (मराठी)</li>
+                                        <li class="col-6">Gujarati (ગુજરાતી)</li>
+                                        <li class="col-6">Kannada (ಕನ್ನಡ)</li>
+                                        <li class="col-6">Malayalam (മലയാളം)</li>
+                                        <li class="col-6">Punjabi (ਪੰਜਾਬੀ)</li>
+                                        <li class="col-6">Urdu (اردو)</li>
+                                        <li class="col-6">Assamese (অসমীয়া)</li>
+                                        <li class="col-6">Odia (ଓଡ଼ିଆ)</li>
+                                    </ul>
+                                    <p>Change your language preference from the top navigation language selector.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content Guidelines -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                    What content is allowed on PlayBharat?
+                                </button>
+                            </h2>
+                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Allowed Content:</strong></p>
+                                    <ul>
+                                        <li>Educational and informational videos</li>
+                                        <li>Entertainment content (comedy, music, dance)</li>
+                                        <li>Cultural and traditional content</li>
+                                        <li>News and current affairs</li>
+                                        <li>Sports and gaming content</li>
+                                        <li>Cooking and lifestyle videos</li>
+                                    </ul>
+                                    <p><strong>Prohibited Content:</strong> Hate speech, violence, adult content, copyright violations, spam, and harmful content.</p>
+                                    <p>Review our <a href="{% url 'community_guidelines' %}">Community Guidelines</a> for detailed policies.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Technical Issues -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                    I'm having trouble playing videos. What should I do?
+                                </button>
+                            </h2>
+                            <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Common solutions:</strong></p>
+                                    <ol>
+                                        <li><strong>Check your internet connection</strong> - Videos require stable internet</li>
+                                        <li><strong>Clear browser cache</strong> - Old cached data can cause issues</li>
+                                        <li><strong>Try a different browser</strong> - Chrome, Firefox, Safari, Edge supported</li>
+                                        <li><strong>Disable ad blockers</strong> - Some extensions interfere with video playback</li>
+                                        <li><strong>Update your browser</strong> - Use the latest version for best performance</li>
+                                    </ol>
+                                    <p>If issues persist, <a href="{% url 'contact' %}">contact our support team</a> with details about your device and browser.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Contact Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h3 class="mb-4">Still Need Help?</h3>
+                    <p class="lead mb-4">Our support team is here to help you with any questions or issues you might have.</p>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="support-contact p-4 bg-white rounded shadow-sm">
+                                <i class="bi bi-envelope-fill text-primary display-6 mb-3"></i>
+                                <h5 class="fw-bold">Email Support</h5>
+                                <p class="text-muted">Get detailed help via email</p>
+                                <a href="{% url 'contact' %}" class="btn btn-primary">Contact Us</a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="support-contact p-4 bg-white rounded shadow-sm">
+                                <i class="bi bi-chat-dots-fill text-success display-6 mb-3"></i>
+                                <h5 class="fw-bold">Community Forum</h5>
+                                <p class="text-muted">Connect with other creators</p>
+                                <a href="#" class="btn btn-success">Join Forum</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .help-page .quick-action-card {
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .help-page .quick-action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border-color: #3b82f6;
+    }
+    
+    .help-page .support-contact {
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .help-page .support-contact:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .help-page .accordion-button:not(.collapsed) {
+        background-color: #f0f9ff;
+        color: #1e40af;
+    }
+    
+    .help-page .search-box .form-control {
+        border-radius: 50px 0 0 50px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .help-page .search-box .btn {
+        border-radius: 0 50px 50px 0;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}

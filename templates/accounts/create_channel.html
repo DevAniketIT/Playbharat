@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create Channel - PlayBharat{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-tv display-1 text-primary mb-3"></i>
+                        <h2 class="card-title">Create Your Channel</h2>
+                        <p class="text-muted">Start your journey as a creator on PlayBharat</p>
+                    </div>
+                    
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>Channel Guidelines:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Choose a unique channel name that represents your content</li>
+                                <li>Add a clear description about your channel's focus</li>
+                                <li>Upload a professional channel banner and profile picture</li>
+                                <li>Follow our community guidelines for content creation</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-plus-circle me-2"></i>Create Channel
+                            </button>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="{% url 'accounts:profile' %}" class="text-decoration-none">
+                                <i class="bi bi-arrow-left me-1"></i>Back to Profile
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
